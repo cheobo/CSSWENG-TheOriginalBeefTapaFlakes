@@ -1,33 +1,44 @@
-.logo-img {
-    width: 100px;
-    height: auto; 
-  }
-  
-.cart-img {
-    width: 50px;
-    height: 50px; 
-  }
+@import '~typeface-roboto';
 
-.navbar{
-    display: flex;
-    justify-content: space-around;
-    padding: 16px;
-    box-shadow: 0 1px 3px -2px black;
+.logo-img {
+    width: 170px;
+    height: auto;
 }
 
-.nav-logo{
+.search-img, .menu-img {
+    width: 35px;
+    height: 35px;
+}
+
+.cart-img {
+    width: 40px;
+    height: 40px;
+    position: relative;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 16px;
+    box-shadow: 0 1px 3px -2px black;
+    color: #F0EAD6;
+}
+
+.nav-logo {
     display: flex;
     align-items: center;
     gap: 10px;
+    font-family: 'Roboto';
 }
 
-.nav-logo p{
+.nav-logo p {
     color: black;
     font-size: 38px;
     font-weight: 600;
 }
 
-.nav-menu{
+.nav-menu {
     display: flex;
     align-items: center;
     list-style: none;
@@ -35,19 +46,20 @@
     color: #626262;
     font-size: 20px;
     font-weight: 500;
-
 }
 
-.nav-menu li{
+.nav-menu li {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 3px;
     cursor: pointer;
+    font-family: 'Roboto';
+    position: relative; 
 }
 
-.nav-menu hr{
+.nav-menu hr {
     border: none;
     width: 80%;
     height: 3px;
@@ -55,8 +67,47 @@
     background-color: beige;
 }
 
-.nav-login-cart{
+.nav-login-cart {
     display: flex;
     align-items: center;
     gap: 45px;
+    position: relative;
+}
+
+.nav-cart-count {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 13px;
+    background: red;
+    color: white;
+    position: absolute; 
+    top: -5px; 
+    right: 150px; 
+    font-family: 'Roboto';
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0px);
+    left: 0;
+    background-color: #fffccc; 
+    border: 1px solid #ccc; 
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1; 
+}
+
+.dropdown-item {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Roboto';
+    font-size: 16px;
+    color: #626262; 
 }
