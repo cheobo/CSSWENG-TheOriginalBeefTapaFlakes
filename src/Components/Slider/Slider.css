@@ -1,0 +1,67 @@
+@import '~typeface-roboto';
+
+.slider{
+    height: 100vh;
+    margin-top: 50px;
+    position: relative;
+}
+
+.slider .list .item{
+    position: absolute;
+    inset: 0 0 0 0;
+    overflow: hidden;
+    top: 50px;
+}
+
+.slider .list .item img{
+    width:  100%;
+    height: 94%;
+    object-fit: cover;
+}
+
+.slider .list .item::after{
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.arrows{
+    position: absolute;
+    top: 45%;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding:20 20px;
+    z-index: 100;
+}
+
+#prev {
+    position: absolute;
+    left: 20px; 
+}
+
+#next {
+    position: absolute;
+    right: 20px; 
+}
+
+
+.arrows button{
+    background-color: rgba(17, 15, 15, 0.333);
+    border: none;
+    font-family: monospace;
+    width: 60px;
+    height: 75px;
+    border-radius: 5px;
+    font-size: x-large;
+    color: #eee;
+    transition: .5s;
+}
+
+.arrows button:hover{
+    background-color: #eee;
+    color: black;
+}
