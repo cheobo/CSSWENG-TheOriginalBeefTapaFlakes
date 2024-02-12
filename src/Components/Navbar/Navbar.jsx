@@ -22,13 +22,13 @@ const Navbar = () => {
         </DropdownButton>
         <DropdownButton title="Partners">
           <DropdownMenu>
-            <button className="dropdown-item" onClick={() => redirectTo('/resellers')}>Resellers</button>
+            <button className="dropdown-item" onClick={() => redirectTo('/partners')}>Resellers</button>
             <button className="dropdown-item" onClick={() => redirectTo('/sponsors')}>Sponsors</button>
           </DropdownMenu>
         </DropdownButton>
         <DropdownButton title="About">
           <DropdownMenu>
-            <button className="dropdown-item" onClick={() => redirectTo('/contact')}>Contact Us</button>
+            <button className="dropdown-item" onClick={() => redirectTo('/about')}>Contact Us</button>
             <button className="dropdown-item" onClick={() => redirectTo('/faq')}>Frequently Asked</button>
             <button className="dropdown-item" onClick={() => redirectTo('/terms')}>Terms of Service</button>
             <button className="dropdown-item" onClick={() => redirectTo('/refund')}>Refund Policy</button>
@@ -37,8 +37,8 @@ const Navbar = () => {
       </ul>
 
       <div className="nav-login-cart">
-        <img src={cartIcon} alt="" className='cart-img' />
-        <div className="nav-cart-count">0</div>
+        <img src={cartIcon} alt="" className='cart-img' onClick={() => redirectTo('/cart')}/>
+        <div className="nav-cart-count">1</div>
         <img src={searchIcon} alt="" className='search-img' />
         <img src={menuIcon} alt="" className='menu-img' />
       </div>
