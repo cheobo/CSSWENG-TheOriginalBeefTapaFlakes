@@ -11,6 +11,7 @@ const Navbar = () => {
       <div className="nav-logo">
         <img src={logoMain} alt="" className='logo-img' />
       </div>
+      <div className="nav-right">
       <ul className="nav-menu">
         <li className="nav-item" onClick={() => redirectTo('/')}>Home</li>
 
@@ -43,6 +44,7 @@ const Navbar = () => {
         <img src={menuIcon} alt="" className='menu-img' />
       </div>
     </div>
+  </div>
   )
 }
 

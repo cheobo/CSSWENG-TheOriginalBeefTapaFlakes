@@ -7,6 +7,7 @@ import slide3 from '../../Assets/slide3.jpg';
 const Slider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const images = [slide1, slide2, slide3];
+  const texts = ['BREAKFAST', 'LUNCH', 'DINNER'];
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -20,9 +21,12 @@ const Slider = () => {
     <div className="slider-container"> 
       <div className="slider">
         <div className="list">
-          <div className="item">
-            <img src={images[currentIndex]} alt={`Slide ${currentIndex + 1}`} className="slide" />
-          </div>
+          {images.map((image, index) => (
+            <div className={`item ${index === currentIndex ? 'active' : ''}`} key={index}>
+              <img src={image} alt={`Slide ${index + 1}`} className="slide" />
+              <div className="centered-text">{texts[index]}</div>
+            </div>
+          ))}
           <div className="arrows">
             <button id="prev" onClick={handlePrevious}>←</button>
             <button id="next" onClick={handleNext}>→</button>
