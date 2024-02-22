@@ -1,0 +1,75 @@
+@import '~typeface-roboto';
+
+.productlist{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    height: 90vh;
+    font-family: 'Roboto';
+}
+
+.productlist h1{
+    color: #171717;
+    font-size: 50px;
+    font-weight: 600;
+}
+
+.productlist hr{
+    width: 200px;
+    height: 3px;
+    border-radius: 10px;
+    background: #252525;
+}
+
+.hr-bottom {
+  margin-top: 150px;
+  margin-bottom: 90px;
+}
+
+.productlist-imgs{
+    margin-top: 50px;
+    justify-content: center;
+    display: flex;
+    gap: 30px;
+    width: 75%;
+    height: 60%;
+}
+
+.productlist-image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.productlist-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.productlist-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-title {
+  text-decoration: none; /* Remove underline by default */
+}
+
+.product-title h3 {
+  color: #171717;
+}
+
+.product-title h3:hover {
+  text-decoration: underline; /* Add underline on hover */
+}

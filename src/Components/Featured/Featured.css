@@ -23,3 +23,15 @@
     margin-top: 0px;
     margin-bottom: 18px;
 }
+
+.product-title {
+    text-decoration: none; /* Remove underline by default */
+}
+  
+.product-title h3 {
+    color: #171717;
+}
+  
+.product-title h3:hover {
+    text-decoration: underline; /* Add underline on hover */
+}

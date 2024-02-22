@@ -1,0 +1,141 @@
+@import '~typeface-roboto';
+
+.product-container {
+    display: block;
+    max-width: 1200px;
+    margin: auto;
+    margin-top: 150px;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: 'Roboto';
+  }
+
+.details-container {
+    display: flex;
+    flex-direction: row;
+}
+  
+.image-gallery {
+    flex: 1;
+    padding-right: 20px;
+}
+  
+.image-gallery img {
+    width: 100%;
+    height: 559px;
+    display: block; /* Remove any extra space beneath the image */
+    object-fit: cover;
+}
+  
+.product-details {
+    flex: 1;
+    padding-left: 20px;
+}
+  
+.product-details h1 {
+    margin-top: 0;
+    color: #333;
+    font-size: 2em;
+}
+  
+.price {
+    color: #E44D26;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+  
+.sku {
+    margin-bottom: 20px;
+}
+  
+.product-details ul {
+    list-style-position: inside;
+    padding-left: 0;
+    margin-left: 0;
+}
+  
+.product-details ul li {
+    margin-bottom: 5px;
+}
+  
+.quantity-selector {
+    margin-bottom: 20px;
+}
+  
+.quantity-selector label {
+    margin-right: 10px;
+}
+  
+.quantity-selector input {
+    width: 25px;
+}
+  
+.add-to-cart {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+}
+  
+.add-to-cart:hover {
+    background-color: #555;
+}
+  
+.flavor-button,
+.size-button {
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    background-color: transparent;
+    cursor: pointer;
+}
+  
+.flavor-button.selected,
+.size-button.selected {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+  
+.product-description {
+    margin-top: 20px;
+    line-height: 1.6;
+}
+  
+/* Responsive layout for smaller screens */
+@media (max-width: 768px) {
+    .product-container {
+      flex-direction: column;
+    }
+  
+    .image-gallery,
+    .product-details {
+      padding: 0;
+    }
+  
+    .product-details {
+      padding-top: 20px;
+    }
+}
+  
+.reviews-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f0f0f0; /* Light grey background */
+    border-radius: 5px;
+}
+  
+.review {
+    border-bottom: 1px solid #ddd; /* Separates individual reviews */
+    padding-bottom: 10px; /* Space at the bottom of each review */
+    margin-bottom: 10px; /* Space between reviews */
+}
+  
+.review:last-child {
+    border-bottom: none; /* Removes border from the last review */
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Featured.css';
 import f1_img from '../../Assets/fprod1.JPG'
 import f2_img from '../../Assets/fprod2.JPG'

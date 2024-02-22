@@ -1,6 +1,6 @@
 import React from 'react'
 import Slider from '../../Slider/Slider.jsx'
-import Featured from '../../Featured/Feature.jsx'
+import Featured from '../../Featured/Featured.jsx'
 import Testimony from '../../Testimonials/Testimony.jsx'
 import Dulo from '../../Footer/Dulo.jsx'
 import './Home.css'
