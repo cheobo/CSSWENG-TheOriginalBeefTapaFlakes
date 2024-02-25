@@ -24,6 +24,7 @@
     justify-content: flex-start;
     align-items: center;
     padding: 2px;
+    padding-right: 1.5rem;
     box-shadow: 0 1px 3px -2px black;
     color: #F0EAD6;
     position: fixed;
@@ -37,7 +38,7 @@
 .nav-right {
     display: flex;
     justify-content: space-between;
-    width: 90%;
+    width: 92%;
 }
 
 .nav-logo {
@@ -119,4 +120,29 @@
     font-family: 'Roboto';
     font-size: 15px;
     color: #626262; 
+}
+
+.dropdown-menu-mobile {
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    z-index: 1000;
+}
+  
+.dropdown-menu-mobile button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+  
+.dropdown-menu-mobile button:hover {
+    background-color: #f0f0f0;
 }

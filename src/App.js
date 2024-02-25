@@ -12,6 +12,10 @@ import Product1 from './Components/Views/Products/Product1_Views.jsx';
 import Product2 from './Components/Views/Products/Product2_Views.jsx';
 import Product3 from './Components/Views/Products/Product3_Views.jsx';
 
+import Login from './Components/Views/Login/Login_Views.jsx';
+import Register from './Components/Views/Register/Register_Views.jsx';
+import ForgotPassword from './Components/Views/ForgotPassword_Views/ForgotPassword_Views.jsx';
+
 function App() {
   return (
     <div className="App">
@@ -33,6 +37,10 @@ function App() {
 
           <Route path='/cart' element={<Cart />} />
           <Route path='/productlist' element={<ProductList />} />
+
+          <Route path='/login' element={<Login />} /> {/* Route for Login page */}
+          <Route path='/register' element={<Register />} /> {/* Route for Register page */}
+          <Route path='/forgot-password' element={<ForgotPassword />} /> {/* Route for Forgot Password page */}
       </Routes>
       </BrowserRouter>
     </div>

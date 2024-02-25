@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Navbar.css';
 import logoMain from '../../Assets/logo_main.png';
 import cartIcon from '../../Assets/cart_icon.png';
@@ -6,6 +6,8 @@ import menuIcon from '../../Assets/menu.png';
 import searchIcon from '../../Assets/search.png';
 
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <div className='navbar'>
       <div className="nav-logo">
@@ -41,10 +43,22 @@ const Navbar = () => {
         <img src={cartIcon} alt="" className='cart-img' onClick={() => redirectTo('/cart')}/>
         <div className="nav-cart-count">1</div>
         <img src={searchIcon} alt="" className='search-img' />
-        <img src={menuIcon} alt="" className='menu-img' />
+        
+        <img
+          src={menuIcon}
+          alt="Menu"
+          className='menu-img'
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        />
+        {isMenuOpen && (
+          <div className="dropdown-menu-mobile">
+            <button onClick={() => redirectTo('/login')}>Login</button>
+            <button onClick={() => redirectTo('/register')}>Register</button>
+          </div>
+        )}
+      </div>
       </div>
     </div>
-  </div>
   )
 }
 
@@ -53,7 +67,7 @@ const redirectTo = (route) => {
 };
 
 const DropdownButton = ({ title, children }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
