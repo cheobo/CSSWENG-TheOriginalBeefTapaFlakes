@@ -1,0 +1,29 @@
+.testimony-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30vh;
+  }
+  
+  .swiper-container {
+    width: 50%;
+  }
+  
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    width: 150px;
+    background-color: rgb(218, 218, 218);
+    color: black;
+    cursor: pointer;
+  }
+  

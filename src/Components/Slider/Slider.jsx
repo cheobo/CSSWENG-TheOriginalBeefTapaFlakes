@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Slider.css';
 import slide1 from '../../Assets/slide1.JPG';
 import slide2 from '../../Assets/slide2.JPG';
@@ -7,15 +7,15 @@ import slide3 from '../../Assets/slide3.jpg';
 const Slider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const images = [slide1, slide2, slide3];
-  const texts = ['BREAKFAST', 'LUNCH', 'DINNER'];
+  const texts = ['Original.', 'Beefy.', 'Flakey.'];
 
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-  };
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 20000); 
 
-  const handlePrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
-  };
+    return () => clearInterval(timer); 
+  }, [images.length]);
 
   return (
     <div className="slider-container"> 
@@ -24,13 +24,15 @@ const Slider = () => {
           {images.map((image, index) => (
             <div className={`item ${index === currentIndex ? 'active' : ''}`} key={index}>
               <img src={image} alt={`Slide ${index + 1}`} className="slide" />
-              <div className="centered-text">{texts[index]}</div>
+              {(index === 0) && (
+                <div className={`slide-text ${index === 2 ? 'right' : ''}`}> 
+                  <p className="small-text">THE ORIGINAL</p>
+                  <p className="bold-text">BEEF TAPA</p>
+                  <p className="count-text">FLAKES.</p>
+                </div>
+              )}
             </div>
           ))}
-          <div className="arrows">
-            <button id="prev" onClick={handlePrevious}>←</button>
-            <button id="next" onClick={handleNext}>→</button>
-          </div>
         </div>
       </div>
     </div>
