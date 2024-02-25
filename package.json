@@ -13,7 +13,7 @@
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.22.0",
     "react-scripts": "^5.0.1",
-    "swiper": "^11.0.6",
+    "swiper": "^6.8.4",
     "typeface-roboto": "^1.1.13",
     "web-vitals": "^2.1.4"
   },
