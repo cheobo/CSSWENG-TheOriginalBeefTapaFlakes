@@ -7,6 +7,7 @@ import ProductList from './Components/ProductList/ProductList.jsx'
 import Partners from './Components/Views/Partners.jsx';
 import About from './Components/Views/About.jsx';
 import Cart from './Components/Views/Cart.jsx';
+import Footer from './Components/Footer/Dulo.jsx';
 
 
 import Product1 from './Components/Views/Products/Product1_Views.jsx';
@@ -31,7 +32,6 @@ function App() {
           <Route path='/about/faq' element={<About category="faq" />} />
           <Route path='/about/terms' element={<About category="terms" />} />
           <Route path='/about/refund' element={<About category="refund" />} />
-
           <Route path='/cart' element={<Cart />} />
           <Route path='/productlist' element={<ProductList />} />
       </Routes>
