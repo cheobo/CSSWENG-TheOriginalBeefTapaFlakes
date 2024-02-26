@@ -19,6 +19,9 @@ const Register = () => {
 
             if(response.status === 201)
                 redirectTo('/login');
+
+            if(response.status === 400)
+                alert('Email or username is already registered');
         } catch (error) {
             console.error('Login error:', error);
         }

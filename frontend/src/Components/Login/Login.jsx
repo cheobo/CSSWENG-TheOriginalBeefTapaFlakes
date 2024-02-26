@@ -17,6 +17,9 @@ const Login = () => {
 
             if(response.status !== 400)
                 redirectTo('/');
+
+            if(response.status === 400)
+                alert('Invalid login');
         } catch (error) {
             console.error('Login error:', error);
         }
