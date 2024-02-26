@@ -8,13 +8,15 @@ const Login = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/login', {
+            const response = await fetch('http://localhost:5000/api/users/login', {
+
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email, password })
             });
-            const data = await response.json();
-            alert(data.message);
+
+            if(response.status !== 400)
+                redirectTo('/');
         } catch (error) {
             console.error('Login error:', error);
         }

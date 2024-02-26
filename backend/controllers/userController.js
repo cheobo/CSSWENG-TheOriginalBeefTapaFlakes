@@ -8,25 +8,33 @@ import generateToken from "../utils/generateToken.js";
  * database ID
  */
 const registerUser = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
-    const userExists = await User.findOne({email});
+    const { email, username, password } = req.body;
+    const emailExists = await User.findOne({ email });
+    const usernameExists = await User.findOne({ username });
 
-    if (userExists) {
+    if (emailExists) {
         res.status(400);
         throw new Error("Email is already registered");
     }
 
+    if (usernameExists) {
+        res.status(400);
+        throw new Error("Username is already registered");
+    }
+
     const user = await User.create({
         email,
+        username,
         password
     });
 
     if (user) {
-        generateToken(res, user._id);
+        //generateToken(res, user._id);
 
         res.status(201).json({
             _id: user._id,
-            email: user.email
+            email: user.email,
+            username: user.username
         });
     } else {
         res.status(400);

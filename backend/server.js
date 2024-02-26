@@ -1,3 +1,4 @@
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 
@@ -22,6 +23,10 @@ app.get("/", (req,res)=>{
 
 const port = process.env.PORT || 5000
 
+app.use(cors({
+    credentials: true,
+    origin: "http://localhost:3000"
+}));
 app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
