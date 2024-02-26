@@ -19,11 +19,19 @@
     cursor: pointer;
 }
 
+.user-img {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
 .navbar {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     padding: 2px;
+    padding-right: 1.5rem;
     box-shadow: 0 1px 3px -2px black;
     color: #F0EAD6;
     position: fixed;
@@ -31,13 +39,14 @@
     width: 100%;
     background-color: #fffffe;
     z-index: 1000;
+    box-sizing: border-box;
 }
 
 
 .nav-right {
     display: flex;
     justify-content: space-between;
-    width: 90%;
+    width: 92%;
 }
 
 .nav-logo {
@@ -68,6 +77,10 @@
     position: relative; 
 }
 
+.nav-menu li:hover {
+    color: #000000;
+}
+
 .nav-menu hr {
     border: none;
     width: 80%;
@@ -79,6 +92,7 @@
 .nav-login-cart {
     display: flex;
     align-items: center;
+    list-style: none;
     gap: 45px;
     position: relative;
 }
@@ -95,28 +109,48 @@
     color: white;
     position: absolute; 
     top: 8px; 
-    right: 135px; 
+    right: 206px; 
     font-family: 'Roboto';
 }
 
 .dropdown-menu {
     position: absolute;
-    top: calc(100% + 0px);
-    left: 110;
-    background-color: #fffccc; 
-    border: 1px solid #ccc; 
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 1; 
+    right: 0;
+    top: 30px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    width: 200px;
+    z-index: 1000;
 }
 
-.dropdown-item {
-    background: none;
+.dropdown-menu-icon {
+    position: absolute;
+    right: 70px;
+    top: 44px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    width: 200px;
+    z-index: 1000;
+}
+
+.dropdown-button button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    text-align: left;
     border: none;
+    background-color: transparent;
     cursor: pointer;
-    font-family: 'Roboto';
-    font-size: 15px;
-    color: #626262; 
+}
+
+.dropdown-button button:hover {
+    background-color: #f0f0f0;
+}
+
+.cart-img:hover, .search-img:hover, .user-img:hover, .menu-img:hover {
+    transform: scale(1.1);
 }

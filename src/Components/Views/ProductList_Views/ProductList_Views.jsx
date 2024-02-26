@@ -6,7 +6,7 @@ import './ProductList_Views.css'
 
 const ProductList_Views = () => {
   return (
-    <div className="productlist-container">
+    <div className="productlist_views-container">
       <Slider/>
       <ProductList/>
       <Dulo/>
