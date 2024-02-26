@@ -5,7 +5,7 @@ import './Login_Views.css';
 
 const Login_Views = () => {
   return (
-    <div className="container">
+    <div className="login_views-container">
       <Login/>
       <Dulo/>
     </div>

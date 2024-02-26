@@ -5,7 +5,7 @@ import './Register_Views.css';
 
 const Register_Views = () => {
   return (
-    <div className="container">
+    <div className="register_views-container">
       <Register/>
       <Dulo/>
     </div>
