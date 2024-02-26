@@ -5,7 +5,7 @@ import './Product2_Views.css'
 
 const Product2_Views = () => {
   return (
-    <div className="container">
+    <div className="product2_views-container">
       <Product2/>
       <Dulo/>
     </div>

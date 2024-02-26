@@ -5,7 +5,7 @@ import './ForgotPassword_Views.css';
 
 const ForgotPassword_Views = () => {
   return (
-    <div className="container">
+    <div className="forgotpassword_views-container">
       <ForgotPassword/>
       <Dulo/>
     </div>
