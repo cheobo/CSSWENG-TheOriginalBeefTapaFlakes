@@ -39,7 +39,7 @@ const ProductList = () => {
           <p><strong>P4,450</strong></p>
         </div>
       </div>
-      <hr className="hr-bottom" />
+      {/* <hr className="hr-bottom" /> */}
     </div>
   );
 };

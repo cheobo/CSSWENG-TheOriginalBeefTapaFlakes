@@ -7,6 +7,8 @@ import ProductList from './Components/ProductList/ProductList.jsx'
 import Partners from './Components/Views/Partners.jsx';
 import About from './Components/Views/About.jsx';
 import Cart from './Components/Views/Cart.jsx';
+import Footer from './Components/Footer/Dulo.jsx';
+
 
 import Product1 from './Components/Views/Products/Product1_Views.jsx';
 import Product2 from './Components/Views/Products/Product2_Views.jsx';
@@ -24,17 +26,16 @@ function App() {
       <Routes>
       <Route path='/' element={<Home />} />
           <Route path='/products' element={<Products category="list" />} />
-          <Route path='/product1' element={<Product1 />} /> {/* New route for Product 1 */}
-          <Route path='/product2' element={<Product2 />} /> {/* New route for Product 2 */}
-          <Route path='/product3' element={<Product3 />} /> {/* New route for Product 3 */}
-          <Route path='/search' element={<Products category="search" />} /> {/* Adjusted path */}
+          <Route path='/product1' element={<Product1 />} /> 
+          <Route path='/product2' element={<Product2 />} />
+          <Route path='/product3' element={<Product3 />} /> 
+          <Route path='/search' element={<Products category="search" />} />
           <Route path='/partners/resellers' element={<Partners category="resellers" />} />
           <Route path='/partners/sponsors' element={<Partners category="sponsors" />} />
           <Route path='/about/contact' element={<About category="contact" />} />
           <Route path='/about/faq' element={<About category="faq" />} />
           <Route path='/about/terms' element={<About category="terms" />} />
           <Route path='/about/refund' element={<About category="refund" />} />
-
           <Route path='/cart' element={<Cart />} />
           <Route path='/productlist' element={<ProductList />} />
 
