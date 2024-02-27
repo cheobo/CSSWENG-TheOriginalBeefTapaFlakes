@@ -10,7 +10,7 @@ const Featured = () => {
   const descriptions = ['Experience the heavenly taste of our Adobo Flakes, carefully harvested from the clouds where flavors blend with ethereal perfection. Each bite unveils a symphony of savory goodness, transporting you to culinary nirvana.'
   , 'Dive into a celestial feast with our Adobo Flakes, crafted from clouds where flavor reigns supreme. Delicately harvested and expertly seasoned, each bite offers a glimpse into the divine, leaving taste buds enchanted and cravings satisfied.'
   , 'Indulge in the celestial essence of our Adobo Flakes, sourced from the heavens above where culinary magic unfolds. Born from clouds kissed by flavor, these flakes offer a taste journey like no other, elevating your dining experience to celestial heights.'];
-  const titles = ['Adobo Flakes', 'Tapa Flakes', 'Title Flakes']; 
+  const titles = ['The Original Beef Tapa Flakes', 'Trial Pack All 3 Flavors', 'Negosyo Package']; 
 
   const [hasAnimated, setHasAnimated] = useState(false);
 

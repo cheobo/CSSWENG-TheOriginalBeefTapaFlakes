@@ -1,21 +1,21 @@
 @import '~typeface-roboto';
 
-.productlist{
+.productlist-container{
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    height: 90vh;
+    min-height: 92vh;
     font-family: 'Roboto';
 }
 
-.productlist h1{
+.productlist-container h1{
     color: #171717;
     font-size: 50px;
     font-weight: 600;
 }
 
-.productlist hr{
+.productlist-container hr{
     width: 200px;
     height: 3px;
     border-radius: 10px;
@@ -46,20 +46,6 @@
     width: 100%;
     height: auto;
     object-fit: cover;
-}
-
-.productlist-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
 }
 
 .product-title {
