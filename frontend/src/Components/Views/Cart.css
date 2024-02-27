@@ -1,0 +1,54 @@
+.cart-container {
+    font-family: 'Roboto', sans-serif;
+    margin-top: 150px;
+    border-radius: 10px;
+    padding: 20px;
+  }
+  
+  .cart-container h1 {
+    margin-bottom: 20px;
+  }
+  
+  .item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border: 1px solid black;
+    padding: 10px;
+  }
+  
+  .item p {
+    margin-right: 10px;
+  }
+  
+  .item img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+  
+  .btn {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: rgb(27, 27, 27); 
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .btn:hover {
+    color: black; 
+    background-color: white;
+  }
+  
+  #Dulo {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
