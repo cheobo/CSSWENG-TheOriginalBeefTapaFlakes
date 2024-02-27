@@ -14,28 +14,36 @@ const Cart = () => {
     // ADD
   };
 
-  const handleEdit = (id) => {
-    // EDIT
-  };
-
   const handleDelete = (id) => {
     // DELETE
   };
 
+  const handleCheckout = () => {
+    // CHECKOUT
+  };
+
   return (
-    <div className="cart-container">
-      <h1>Cart</h1>
-      {items.map((item) => (
-        <div key={item.id} className="item">
-          <p>{item.quantity}</p>
-          <img src={prod} alt={item.title} />
-          <p>{item.title}</p>
-          <p>PHP {item.price}</p>
-          <button className="btn" onClick={() => handleEdit(item.id)}>Edit</button>
-          <button className="btn" onClick={() => handleDelete(item.id)}>Delete</button>
+    <div className="grid-container">
+      <div className="grid-item"></div>
+      <div className="grid-item">
+        <div className="cart-container">
+          <h1>Cart</h1>
+          <div className="items-container">
+            {items.map((item) => (
+              <div key={item.id} className="item">
+                <p><strong>Quantity:</strong> {item.quantity}</p>
+                <img src={prod} alt={item.title} />
+                <p><strong>Product:</strong> {item.title}</p>
+                <p><strong>Price:</strong> PHP {item.price}</p>
+                <button className="btn" onClick={() => handleDelete(item.id)}>Delete</button>
+              </div>
+            ))}
+            <button className="btn" onClick={handleAdd}>Add Item</button>
+            <button className="btn" onClick={handleCheckout}>Checkout</button>
+          </div>
         </div>
-      ))}
-      <button className="btn" onClick={handleAdd}>Add Item</button>
+      </div>
+      <div className="grid-item"></div>
       <Dulo />
     </div>
   );
