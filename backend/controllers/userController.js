@@ -6,7 +6,7 @@ import generateToken from "../utils/generateToken.js";
  * Status 400 otherwise
  * Generates a token with the record's
  * database ID
- */
+ * */
 const registerUser = asyncHandler(async (req, res) => {
     const { email, username, password } = req.body;
     const emailExists = await User.findOne({ email });
@@ -45,7 +45,7 @@ const registerUser = asyncHandler(async (req, res) => {
 /* Status 400 on failure
  * Generates a token with the matching record's
  * database ID
- */
+ * */
 const authenticateUser = asyncHandler(async(req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
