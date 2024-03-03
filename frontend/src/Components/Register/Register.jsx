@@ -7,8 +7,24 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        try {
+            const response = await fetch('http://localhost:5000/api/users/register', {
+
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, username, password })
+            });
+
+            if(response.status === 201)
+                redirectTo('/login');
+
+            if(response.status === 400)
+                alert('Email or username is already registered');
+        } catch (error) {
+            console.error('Login error:', error);
+        }
     };
 
     return (
@@ -38,6 +54,10 @@ const Register = () => {
             </div>
         </div>
     );
+};
+
+const redirectTo = (route) => {
+    window.location.href = route;
 };
 
 export default Register;
