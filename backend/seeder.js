@@ -25,13 +25,6 @@ const importData = async () => {
     await Product.insertMany(sampleProducts);
     await User.insertMany(sampleUsers);
 
-    const name = "Nathan";
-    const email = "nathan@gmail.com";
-    const password = "123";
-
-    const user = new User({name: name, email: email, password: password});
-    await user.save();
-
     console.log("Data Imported!".green.inverse);
     process.exit();
   } catch (error) {
