@@ -62,14 +62,9 @@ const productSchema = mongoose.Schema(
       default: 0.0,
     },
 
-    flavor: {
+    package: {
       type: [String],
       required: true,
-    },
-
-    size: {
-        type: [String],
-        required: true,
     },
 
     countInStock: {

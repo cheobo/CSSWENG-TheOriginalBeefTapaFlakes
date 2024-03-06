@@ -1,42 +1,26 @@
 const products = [
     {
-      name: "The Original Beef Tapa Flakes",
+      name: "Sub-Reseller Package",
       image: "frontend/src/Assets/fprod1.jpg",
       description:
-        "Experience the heavenly taste of our Adobo Flakes, carefully harvested from the clouds where flavors blend with ethereal perfection. Each bite unveils a symphony of savory goodness, transporting you to culinary nirvana.",
+        "5 Bottles of the Classic Flavor, 5 Bottles of the Sisig Flavor, and 2 Bottles of Spicy Flavor",
       avgRating: 0.0,
       countReviews: 0,
-      price: [215.0, 335.0],
-      flavor: ["Classic", "Spicy", "Sisig"],
-      size: ["330 Grams", "510 Grams"],
+      price: [1975.0, 3075.0],
+      package: ["Package A", "Package B"],
       countInStock: 10,
       ingredients: "Beef, Salt, Pepper, Soy Sauce, Vinegar, Mixed Spices, and Vegetable Oil",
       nutriInfo: "Placeholder"
     },
     {
-        name: "Trial Pack All 3 Flavors",
+        name: "Reseller Package",
         image: "frontend/src/Assets/fprod2.jpg",
         description:
-          "Dive into a celestial feast with our Adobo Flakes, crafted from clouds where flavor reigns supreme. Delicately harvested and expertly seasoned, each bite offers a glimpse into the divine, leaving taste buds enchanted and cravings satisfied.",
+          "8 Bottles of All Flavors (Classic, Sisig, and Spicy)",
         avgRating: 0.0,
         countReviews: 0,
-        price: 625.0,
-        flavor: "Classic, Spicy, and Sisig",
-        size: "330 Grams",
-        countInStock: 10,
-        ingredients: "Beef, Salt, Pepper, Soy Sauce, Vinegar, Mixed Spices, and Vegetable Oil",
-        nutriInfo: "Placeholder"
-      },
-      {
-        name: "Negosyo Package 1 Box 24 Bottles",
-        image: "frontend/src/Assets/fprod3.jpg",
-        description:
-          "Indulge in the celestial essence of our Adobo Flakes, sourced from the heavens above where culinary magic unfolds. Born from clouds kissed by flavor, these flakes offer a taste journey like no other, elevating your dining experience to celestial heights.",
-        avgRating: 0.0,
-        countReviews: 0,
-        price: 4450.0,
-        flavor: ["Classic", "Spicy", "Sisig"],
-        size: "330 Grams",
+        price: [3950.0, 6150.0],
+        package: ["Package A", "Package B"],
         countInStock: 10,
         ingredients: "Beef, Salt, Pepper, Soy Sauce, Vinegar, Mixed Spices, and Vegetable Oil",
         nutriInfo: "Placeholder"
