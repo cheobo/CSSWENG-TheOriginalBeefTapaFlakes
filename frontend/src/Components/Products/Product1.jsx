@@ -11,9 +11,7 @@ const Product1 = () => {
     // Initialize quantity state to 1
     const [quantity, setQuantity] = useState(1);
 
-    const [selectedFlavor, setSelectedFlavor] = useState('');
-
-    const [selectedSize, setSelectedSize] = useState('');
+    const [selectedPackage, setSelectedPackage] = useState('');
 
     const [warningMessage, setWarningMessage] = useState('');
 
@@ -24,45 +22,33 @@ const Product1 = () => {
         setQuantity(event.target.value);
     };
 
-    // Function to handle flavor selection
-    const handleFlavorSelection = (flavor) => {
-        setSelectedFlavor(currentFlavor => currentFlavor === flavor ? '' : flavor);
+    // Function to handle package selection
+    const handlePackageSelection = (productpackage) => {
+        setSelectedPackage(currentPackage => currentPackage === productpackage ? '' : productpackage);
         setShowWarning(false);
     };
 
-    // Function to update the selected size
-    const handleSizeSelection = (size) => {
-        setSelectedSize(currentSize => currentSize === size ? '' : size);
-        setShowWarning(false);
-    };
-
-    // Function to dynamically update price based on size
+    // Function to dynamically update price based on package
     const getPrice = () => {
-        switch (selectedSize) {
-            case '330 Grams':
-                return 'P215';
-            case '510 Grams':
-                return 'P335';
+        switch (selectedPackage) {
+            case 'Package A':
+                return 'P1,975';
+            case 'Package B':
+                return 'P3,075';
             default:
-                return 'P215 - P335';
+                return 'P1,975 - P3,075';
         }
     };
 
-    // Function that displays an error message if the user hasn't selected a flavor or size or both
+    // Function that displays an error message if the user hasn't selected a package
     const handleAddToCart = () => {
-        if (!selectedFlavor && !selectedSize) {
-          setWarningMessage('Please select a flavor and size');
-          setShowWarning(true);
-        } else if (!selectedFlavor) {
-          setWarningMessage('Please select a flavor');
-          setShowWarning(true);
-        } else if (!selectedSize) {
-          setWarningMessage('Please select a size');
+        if (!selectedPackage) {
+          setWarningMessage('Please select a package');
           setShowWarning(true);
         } else {
           // Proceed with add to cart functionality
           setShowWarning(false);
-          console.log("Product added to cart:", { selectedFlavor, selectedSize, quantity });
+          console.log("Product added to cart:", { selectedPackage, quantity });
           // Add to cart logic here
         }
     };
@@ -78,17 +64,18 @@ const Product1 = () => {
         <div className="product1-container">
             <div className="p1-details-container">
                 <div className="p1-image-gallery">
-                    <img src={image} alt="The Original Beef Tapa Flakes" />
+                    <img src={image} alt="Sub-Reseller Package" />
                     {/* Add additional thumbnails or a carousel as needed */}
                 </div>
                 <div className="product1-details">
-                    <h1>The Original Beef Tapa Flakes</h1>
+                    <h1>Sub-Reseller Package</h1>
+                    <p className='p1-amount'>12 Bottles/Box</p>
                     <p className="p1-price">{getPrice()}</p>
-                    <p className="product1-description">
-                        Experience the heavenly taste of our Beef Tapa Flakes, carefully harvested from
-                        the clouds where flavors blend with ethereal perfection. Each bite unveils a
-                        symphony of savory goodness, transporting you to culinary nirvana.
-                    </p>
+                    <ul>
+                        <li>Classic: 5 Bottles</li>
+                        <li>Sisig: 5 Bottles</li>
+                        <li>Spicy: 2 Bottles</li>
+                    </ul>
                     <div className="p1-quantity-selector">
                         <label htmlFor="quantity">Quantity:</label>
                         <input 
@@ -111,26 +98,14 @@ const Product1 = () => {
                             {warningMessage}
                         </div>
                     )}
-                    <div className="p1-flavor-selector">
-                        {['Classic', 'Spicy', 'Sisig'].map((flavor) => (
+                    <div className="p1-package-selector">
+                        {['Package A', 'Package B',].map((productpackage) => (
                             <button
-                                key={flavor}
-                                onClick={() => handleFlavorSelection(flavor)}
-                                className={selectedFlavor === flavor ? 'p1-flavor-button selected' : 'p1-flavor-button'}
+                                key={productpackage}
+                                onClick={() => handlePackageSelection(productpackage)}
+                                className={selectedPackage === productpackage ? 'p1-package-button selected' : 'p1-package-button'}
                             >
-                                {flavor}
-                            </button>
-                        ))}
-                    </div>
-                    <br></br>
-                    <div className="p1-size-selector">
-                        {['330 Grams', '510 Grams'].map((size) => (
-                            <button
-                                key={size}
-                                onClick={() => handleSizeSelection(size)}
-                                className={selectedSize === size ? 'p1-size-button selected' : 'p1-size-button'}
-                            >
-                                {size}
+                                {productpackage}
                             </button>
                         ))}
                     </div>

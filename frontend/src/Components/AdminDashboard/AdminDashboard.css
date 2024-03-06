@@ -1,0 +1,35 @@
+.admin-dashboard {
+    min-height: 100vh;
+}
+  
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #e7e7e7;
+}
+  
+.admin-header h1 {
+    margin: 0;
+    /* Style as needed */
+}
+  
+.admin-actions .btn-add-new {
+    padding: 0.5rem 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+  
+.admin-actions .btn-add-new:hover {
+    background-color: #45a049;
+}
+  
+.admin-content {
+    padding: 1rem;
+    /* Style your content area */
+}

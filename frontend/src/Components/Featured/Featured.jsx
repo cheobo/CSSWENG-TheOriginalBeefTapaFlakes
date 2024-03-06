@@ -3,14 +3,12 @@ import { Fade } from 'react-awesome-reveal';
 import styles from './Featured.module.css'; 
 import f1_img from '../../Assets/fprod1.JPG'
 import f2_img from '../../Assets/fprod2.JPG'
-import f3_img from '../../Assets/fprod3.JPG'
 
 const Featured = () => {
-  const images = [f1_img, f2_img, f3_img];
+  const images = [f1_img, f2_img];
   const descriptions = ['Experience the heavenly taste of our Adobo Flakes, carefully harvested from the clouds where flavors blend with ethereal perfection. Each bite unveils a symphony of savory goodness, transporting you to culinary nirvana.'
-  , 'Dive into a celestial feast with our Adobo Flakes, crafted from clouds where flavor reigns supreme. Delicately harvested and expertly seasoned, each bite offers a glimpse into the divine, leaving taste buds enchanted and cravings satisfied.'
-  , 'Indulge in the celestial essence of our Adobo Flakes, sourced from the heavens above where culinary magic unfolds. Born from clouds kissed by flavor, these flakes offer a taste journey like no other, elevating your dining experience to celestial heights.'];
-  const titles = ['The Original Beef Tapa Flakes', 'Trial Pack All 3 Flavors', 'Negosyo Package']; 
+  , 'Dive into a celestial feast with our Adobo Flakes, crafted from clouds where flavor reigns supreme. Delicately harvested and expertly seasoned, each bite offers a glimpse into the divine, leaving taste buds enchanted and cravings satisfied.'];
+  const titles = ['Sub-Reseller Package', 'Reseller Package'];
 
   const [hasAnimated, setHasAnimated] = useState(false);
 

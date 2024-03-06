@@ -33,5 +33,5 @@ app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 
 app.listen(port,()=>{
-    console.log(`Serve at http://localhost:${port}`)
+    console.log(`Server at http://localhost:${port}`)
 })

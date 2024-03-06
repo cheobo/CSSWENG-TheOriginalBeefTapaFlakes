@@ -11,7 +11,7 @@ const Product2 = () => {
     // Initialize quantity state to 1
     const [quantity, setQuantity] = useState(1);
 
-    const [selectedSize, setSelectedSize] = useState('');
+    const [selectedPackage, setSelectedPackage] = useState('');
 
     const [warningMessage, setWarningMessage] = useState('');
 
@@ -22,21 +22,33 @@ const Product2 = () => {
         setQuantity(event.target.value);
     };
 
-    // Function to update the selected size
-    const handleSizeSelection = (size) => {
-        setSelectedSize(currentSize => currentSize === size ? '' : size);
+    // Function to update the selected package
+    const handlePackageSelection = (productpackage) => {
+        setSelectedPackage(currentPackage => currentPackage === productpackage ? '' : productpackage);
         setShowWarning(false);
     };
 
-    // Function that displays an error message if the user hasn't selected a size
+    // Function to dynamically update price based on package
+    const getPrice = () => {
+        switch (selectedPackage) {
+            case 'Package A':
+                return 'P3,950';
+            case 'Package B':
+                return 'P6,150';
+            default:
+                return 'P3,950 - P6,150';
+        }
+    };
+
+    // Function that displays an error message if the user hasn't selected a package
     const handleAddToCart = () => {
-        if (!selectedSize) {
-          setWarningMessage('Please select a size');
+        if (!selectedPackage) {
+          setWarningMessage('Please select a package');
           setShowWarning(true);
         } else {
           // Proceed with add to cart functionality
           setShowWarning(false);
-          console.log("Product added to cart:", { selectedSize, quantity });
+          console.log("Product added to cart:", { selectedPackage, quantity });
           // Add to cart logic here
         }
     };
@@ -52,18 +64,18 @@ const Product2 = () => {
         <div className="product2-container">
             <div className="p2-details-container">
                 <div className="p2-image-gallery">
-                    <img src={image} alt="Trial Pack All 3 Flavors" />
+                    <img src={image} alt="Reseller Package" />
                     {/* Add additional thumbnails or a carousel as needed */}
                 </div>
                 <div className="product2-details">
-                    <h1>Trial Pack All 3 Flavors</h1>
-                    <p className="p2-price">P625</p>
-                    <p className="product2-description">
-                        Dive into a celestial feast with our Beef Tapa Flakes, crafted from clouds where
-                        flavor reigns supreme. Delicately harvested and expertly seasoned, each bite
-                        offers a glimpse into the divine, leaving taste buds enchanted and cravings
-                        satisfied.
-                    </p>
+                    <h1>Reseller Package</h1>
+                    <p className="p2-amount">24 Bottles/Box</p>
+                    <p className="p2-price">{getPrice()}</p>
+                    <ul>
+                        <li>Classic: 8 Bottles</li>
+                        <li>Sisig: 8 Bottles</li>
+                        <li>Spicy: 8 Bottles</li>
+                    </ul>
                     <div className="p2-quantity-selector">
                         <label htmlFor="quantity">Quantity:</label>
                         <input 
@@ -86,14 +98,14 @@ const Product2 = () => {
                             {warningMessage}
                         </div>
                     )}
-                    <div className="p2-size-selector">
-                        {['330 Grams'].map((size) => (
+                    <div className="p2-package-selector">
+                        {['Package A', 'Package B'].map((productpackage) => (
                             <button
-                                key={size}
-                                onClick={() => handleSizeSelection(size)}
-                                className={selectedSize === size ? 'p2-size-button selected' : 'p2-size-button'}
+                                key={productpackage}
+                                onClick={() => handlePackageSelection(productpackage)}
+                                className={selectedPackage === productpackage ? 'p2-package-button selected' : 'p2-package-button'}
                             >
-                                {size}
+                                {productpackage}
                             </button>
                         ))}
                     </div>
