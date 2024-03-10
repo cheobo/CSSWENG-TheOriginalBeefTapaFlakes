@@ -1,7 +1,6 @@
 const products = [
     {
       name: "Sub-Reseller Package",
-      image: "frontend/src/Assets/fprod1.jpg",
       description:
         "5 Bottles of the Classic Flavor, 5 Bottles of the Sisig Flavor, and 2 Bottles of Spicy Flavor",
       avgRating: 0.0,
@@ -14,7 +13,6 @@ const products = [
     },
     {
         name: "Reseller Package",
-        image: "frontend/src/Assets/fprod2.jpg",
         description:
           "8 Bottles of All Flavors (Classic, Sisig, and Spicy)",
         avgRating: 0.0,
