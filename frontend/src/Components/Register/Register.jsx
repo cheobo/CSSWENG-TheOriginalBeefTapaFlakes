@@ -11,16 +11,27 @@ const Register = () => {
         event.preventDefault();
         try {
             const response = await fetch('http://localhost:5000/api/users/register', {
-
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, username, password })
             });
 
-            if(response.status === 201)
-                redirectTo('/login');
+            if (response.status === 201) {
+                const authentication = await fetch('http://localhost:5000/api/users/authenticate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
 
-            if(response.status === 400)
+                if (!(authentication.status === 400)) {
+                    localStorage.setItem('jwt', authentication.token);
+                    redirectTo('/');
+                } else {
+                    alert('Invalid details');
+                }
+            }
+
+            if (response.status === 400)
                 alert('Email or username is already registered');
         } catch (error) {
             console.error('Login error:', error);

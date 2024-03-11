@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "options": {
-    "allowedHosts": ["localhost", ".localhost"],
-    "proxy": "https://localhost:5000/"
+    "allowedHosts": [
+      "localhost",
+      ".localhost"
+    ],
+    "proxy": "http://localhost:5000"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
@@ -13,6 +16,7 @@
     "react": "^18.2.0",
     "react-awesome-reveal": "^4.2.8",
     "react-dom": "^18.2.0",
+    "react-jwt": "^1.2.0",
     "react-native-outlined-text": "^0.5.0",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.22.0",
