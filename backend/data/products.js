@@ -14,7 +14,8 @@ const products = [
               { flavor: "Sisig", "quantity": 5 },
               { flavor: "Spicy", "quantity": 2 }
             ],
-            price: 1975.0
+            price: 1975.0,
+            countInStock: 10,
           },
           {
             packageOption: "Package B",
@@ -24,10 +25,10 @@ const products = [
               { "flavor": "Sisig", "quantity": 5 },
               { "flavor": "Spicy", "quantity": 2 }
             ],
-            price: 3075.0
+            price: 3075.0,
+            countInStock: 10,
           }
         ],
-        countInStock: 100,
         ingredients: "Beef, Salt, Pepper, Soy Sauce, Vinegar, Mixed Spices, and Vegetable Oil",
         nutriInfo: "Placeholder"
       },
@@ -46,7 +47,8 @@ const products = [
               { flavor: "Sisig", "quantity": 8 },
               { flavor: "Spicy", "quantity": 8 }
             ],
-            price: 3950.0
+            price: 3950.0,
+            countInStock: 10,
           },
           {
             packageOption: "Package B",
@@ -56,10 +58,10 @@ const products = [
               { "flavor": "Sisig", "quantity": 8 },
               { "flavor": "Spicy", "quantity": 8   }
             ],
-            price: 6150.0
+            price: 6150.0,
+            countInStock: 10,
           }
         ],
-        countInStock: 100,
         ingredients: "Beef, Salt, Pepper, Soy Sauce, Vinegar, Mixed Spices, and Vegetable Oil",
         nutriInfo: "Placeholder"
       },

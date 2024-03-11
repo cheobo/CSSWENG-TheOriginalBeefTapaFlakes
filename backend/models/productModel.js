@@ -28,6 +28,12 @@ const packageSchema = mongoose.Schema({
     required: true,
     default: 0.0,
   },
+
+  countInStock: {
+    type: Number,
+    required: true,
+    default: 0
+},
 });
 
 // Define a virtual field for totalBottles
@@ -98,12 +104,6 @@ const productSchema = mongoose.Schema(
     },
 
     packages: [packageSchema],
-
-    countInStock: {
-        type: Number,
-        required: true,
-        default: 0
-    },
     
     ingredients: {
         type: String,
