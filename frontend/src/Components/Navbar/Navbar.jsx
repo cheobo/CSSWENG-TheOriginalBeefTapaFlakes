@@ -43,7 +43,7 @@ const Navbar = () => {
                         </DropdownMenu>
                     </DropdownButton>
                     
-                    {/*<li className="nav-item" onCLick={() => redirectTo('/admin-dashboard')}>Admin Dashboard</li>*/}
+                    <li className="nav-item" onClick={() => redirectTo('/admin-dashboard')}>Admin Dashboard</li>
                 </ul>
 
                 <div className="nav-login-cart">
