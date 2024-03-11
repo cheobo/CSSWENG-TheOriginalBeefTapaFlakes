@@ -1,28 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AdminDashboard.css';
+import productsData from 'products';
 
 const AdminDashboard = () => {
-    const [notesData, setNotesData] = useState([
-        { id: 1, productName: 'Sub-Reseller Package A', currentInventory: 10 },
-        { id: 2, productName: 'Sub-Reseller Package B', currentInventory: 10 },
-        { id: 3, productName: 'Reseller Package A', currentInventory: 10 },
-        { id: 4, productName: 'Reseller Package B', currentInventory: 10 }
-    ]);
+    const [products, setProducts] = useState([]);
+    const [editingId, setEditingId] = useState(null);
+    const [editValue, setEditValue] = useState('');
+
+    useEffect(() => {
+        const flattenedProducts = productsData.flatMap(product =>
+            product.packages.map(packageItem => ({
+                id: `${product.name}-${packageItem.packageOption}`,
+                productName: `${product.name} - ${packageItem.packageOption}`,
+                currentInventory: packageItem.countInStock,
+            }))
+        );
+        setProducts(flattenedProducts);
+    }, []);
 
     const addNewProduct = () => {
-        const newId = notesData.reduce((max, p) => p.id > max ? p.id : max, notesData[0].id) + 1;
-
         const newProduct = {
-            id: newId,
-            productName: `New Product ${newId}`,
-            currentInventory: 0,
+            id: `New Product-${products.length + 1}`,
+            productName: `New Product ${products.length + 1}`,
+            currentInventory: 10,
         };
-
-        setNotesData([...notesData, newProduct]);
+        setProducts([...products, newProduct]);
     };
 
-    const navigateToProduct = (url) => {
-        window.location.href = url;
+    const startEdit = (product) => {
+        setEditingId(product.id);
+        setEditValue(product.currentInventory.toString());
+    };
+
+    const saveEdit = async (productId, newInventory) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/products/update/${productId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ inventory: newInventory }),
+            });
+    
+            if (!response.ok) throw new Error('Failed to update the product inventory.');
+    
+            const updatedProduct = await response.json();
+            console.log('Product updated:', updatedProduct);
+    
+        } catch (error) {
+            console.error('Error updating product:', error);
+        }
+    };
+
+    const cancelEdit = () => {
+        setEditingId(null);
+        setEditValue('');
+    };
+
+    const navigateToProduct = (productId) => {
+        window.location.href = `/products/${productId}`;
     };
 
     return (
@@ -38,19 +74,54 @@ const AdminDashboard = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {notesData.map((note, index) => (
-                            <tr key={note.id}>
+                        {products.map((product) => (
+                            <tr key={product.id}>
                                 <td>
-                                    {note.productName}
-                                    <button 
-                                        className="open-product-btn" 
+                                    {product.productName}
+                                    <button
+                                        className="open-product-btn"
                                         style={{ float: 'right' }}
-                                        onClick={() => navigateToProduct(`/product${index < 2 ? '1' : '2'}`)}
+                                        onClick={() => navigateToProduct(product.productName)}
                                     >
                                         OPEN
                                     </button>
                                 </td>
-                                <td>{note.currentInventory}</td>
+                                <td className="inventory-column">
+                                    {editingId === product.id ? (
+                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <input
+                                                type="number"
+                                                value={editValue}
+                                                onChange={(e) => setEditValue(e.target.value)}
+                                            />
+                                            <div>
+                                                <button
+                                                    className="save-inventory-btn"
+                                                    onClick={() => saveEdit(product.id)}
+                                                >
+                                                    SAVE
+                                                </button>
+                                                <button
+                                                    className="cancel-inventory-btn"
+                                                    onClick={cancelEdit}
+                                                    style={{ marginLeft: '5px' }}
+                                                >
+                                                    CANCEL
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <span>{product.currentInventory}</span>
+                                            <button
+                                                className="edit-inventory-btn"
+                                                onClick={() => startEdit(product)}
+                                            >
+                                                EDIT
+                                            </button>
+                                        </div>
+                                    )}
+                                </td>
                             </tr>
                         ))}
                     </tbody>

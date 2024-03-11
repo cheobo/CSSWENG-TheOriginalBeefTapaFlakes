@@ -18,7 +18,24 @@ const getProductById = asyncHandler(async (req, res) => {
     }
   });
 
+  const updateProductInventory = asyncHandler(async (req, res) => {
+    const { productId } = req.params;
+    const { inventory } = req.body;
+
+    const product = await Product.findById(productId);
+
+    if (product) {
+        product.countInStock = inventory;
+        const updatedProduct = await product.save();
+        res.json(updatedProduct);
+    } else {
+        res.status(404);
+        throw new Error("Product not found");
+    }
+});
+
 export {
     getProducts,
     getProductById,
+    updateProductInventory,
 };

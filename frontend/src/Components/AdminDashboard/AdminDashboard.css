@@ -134,14 +134,43 @@
     transform: rotate(45deg);
 }
 
-.open-product-btn {
+.inventory-column {
+    width: 350px;
+}
+
+.inventory-column > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inventory-column input {
+    width: 60%;
+    height: 18px;
+    box-sizing: border-box;
+}
+
+.inventory-column input,
+.inventory-column button {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.open-product-btn,
+.edit-inventory-btn,
+.cancel-inventory-btn,
+.save-inventory-btn {
     padding: auto;
     background-color: white;
+    padding: 0rem 5px;
     color: black;
     border: 1px solid black;
     cursor: pointer;
 }
 
-.open-product-btn:hover {
+.open-product-btn:hover,
+.edit-inventory-btn:hover,
+.cancel-inventory-btn:hover,
+.save-inventory-btn:hover {
     background-color: #f0f0f0;
 }
