@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ProductList.css';
-import f1_img from '../../Assets/fprod1.JPG';
-import f2_img from '../../Assets/fprod2.JPG';
 import { PRODUCT_URL } from '../../API/constants';
 import axiosInstance from '../../API/axiosInstance.js';
 
@@ -10,20 +8,29 @@ const ProductList = () => {
 	// State to store the products fetched from the database
 	const [products, setProducts] = useState([]);
 	
-	const calculateMinMax = (arr) => {
-		if (arr.length === 0) return null;
+	const calculateMinMax = (packages) => {
+		if (!packages || packages.length === 0) return null;
+	
+		// Extract prices from each package option object
+		const prices = packages.map(pckg => pckg.price);
+
+		// Filter out undefined or null values
+		const filteredPrices = prices.filter(price => price !== undefined && price !== null);
+		if (filteredPrices.length === 0) return null;
 	
 		// Convert Decimal128 values to numbers
-		const numericArr = arr.map(obj => parseFloat(obj.$numberDecimal));
+		const numericPrices = filteredPrices.map(price => parseFloat(price.$numberDecimal));
 	
 		// Filter out NaN values and ensure array has at least one numeric value
-		const filteredArr = numericArr.filter(price => !isNaN(price));
-		if (filteredArr.length === 0) return null;
+		const filteredNumericPrices = numericPrices.filter(price => !isNaN(price));
+		if (filteredNumericPrices.length === 0) return null;
 	
-		const min = Math.min(...filteredArr).toLocaleString();
-		const max = Math.max(...filteredArr).toLocaleString();
+		// Calculate minimum and maximum prices
+		const min = Math.min(...filteredNumericPrices).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
+		const max = Math.max(...filteredNumericPrices).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
 	
-		return ` P${min} - P${max}`;
+		// Return the price range as a string
+		return ` ${min} - ${max}`;
 	};
 
 	useEffect(() => {
@@ -40,7 +47,7 @@ const ProductList = () => {
 	};
 	   // Call the fetchProducts function when the component mounts
 	   fetchProducts();
-	}, []); // Empty dependency array to only run the effect once when the component mounts
+	}, []);
 
   	return (
     	<div className="productlist-container">
@@ -51,12 +58,12 @@ const ProductList = () => {
 				{products.map(product => (
           			<div key={product._id} className="productlist-image-container">
             			<Link to={`/products/${product._id}`}>
-            			  <img src={product.image} alt={product.name} className="productlist-image" />
+            			  <img src={`http://localhost:5000/${product.image}`} alt={product.name} className="productlist-image" />
            				</Link>
           				<Link to={`/products/${product._id}`} className="product-title">
               				<h3>{product.name}</h3>
             			</Link>
-            			<p><strong>Price Range:{calculateMinMax(product.price)}</strong></p>
+            			<p><strong>Price Range:{calculateMinMax(product.packages)}</strong></p>
           			</div>
         		))}
       		</div>
