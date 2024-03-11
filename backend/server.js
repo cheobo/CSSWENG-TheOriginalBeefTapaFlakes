@@ -31,7 +31,7 @@ app.use(cors({
 app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
-app.use("/api/cart", cartRoutes);
+app.use("/api/carts", cartRoutes);
 app.use("/api/upload", uploadRoutes);
 
 const __dirname = path.resolve();

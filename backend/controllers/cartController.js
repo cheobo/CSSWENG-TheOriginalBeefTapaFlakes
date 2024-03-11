@@ -3,72 +3,67 @@ import Cart from "../models/cartModel.js";
 
 
 const addToCart = asyncHandler(async (req, res) => {
-    const userId = req.body.userId; // change to "req.user._id" after implementing user authentication 
-    const cartItemsAdded = req.body.cartItems;
-    
+    const userId = req.user._id; 
+    const cartItemsAdded = req.body;
+
     try {
         // Find Cart document of the current user
-        const userCart = await Cart.findOne({user: userId});
+        const userCart = await Cart.findOne({ user: userId });
         if (!userCart) {
             // If the user doesn't have a cart yet, create a new cart
             const newCart = new Cart({
                 user: userId,
-                cartItems: cartItemsAdded,
-                totalPrice:  calculateTotalPrice(cartItemsAdded)
+                cartItems: [],
+                totalPrice: 0
             });
+            newCart.cartItems.push(cartItemsAdded);
+            newCart.totalPrice = calculateTotalPrice(newCart.cartItems);
             await newCart.save();
         } else {
-            checkItems(userCart, cartItemsAdded)
-            userCart.totalPrice = calculateTotalPrice(userCart.cartItems);
-            await userCart.save();
+            await checkItems(userCart, cartItemsAdded); // Wait for the checkItems function to complete
         }
-            
-        // Send a success response
-        res.status(201).json({ message: 'Item added to cart successfully', cartItemsAdded });
+        res.status(201).json({ message: 'Item added to cart successfully', cartItemsAdded});
     } catch (error) {
         // If an error occurs, send an error response
-        console.error('Error adding item to cart:', error);
-        res.status(500).json({ error: 'Failed to add item to cart' });
+        res.status(500).json(error);
     }
+
+    
 });
 
 // Function to calculate total price based on cart items
 const calculateTotalPrice = (cartItems) => {
     let totalPrice = 0;
     cartItems.forEach(cartItem => {
-        totalPrice += cartItem.price * cartItem.quantity;
+        totalPrice += (cartItem.price * cartItem.quantity);
     });
     return totalPrice;
 };
 
 // Function to check if there is duplicating products
-const checkItems = async (Cart, cartItems) => {
+const checkItems = async (cart, newCartItem) => {
     try {
-        // Iterate over each item in the cartItems array
-        for (const cartItem of cartItems) {
-            // Check if the cartItem with the same productId exists in the cart
-            const existingItemIndex = Cart.cartItems.findIndex(item => item.productId.equals(cartItem.productId) && item.size === cartItem.size && item.flavor === cartItem.flavor);
-            if (existingItemIndex !== -1) {
-                // If the item already exists in the cart, increment quantity
-                Cart.cartItems[existingItemIndex].quantity++;
-            } else {
-                // If the item does not exist in the cart, add to Cart
-                cartItems.forEach((cartItem, index) => {
-                    const productId = cartItem.productId;
-                    const name = cartItem.name;
-                    const flavor = cartItem.flavor;
-                    const size = cartItem.size;
-                    const price = cartItem.price;
-                    const quantity = cartItem.quantity;
-    
-                    Cart.cartItems.push(cartItem);
-                });
-            }
+        // Check if the newCartItem already exists in the cart
+        const existingItem = cart.cartItems.find(
+            (item) =>
+                item.selectedPackage === newCartItem.selectedPackage
+        );
+
+        if (existingItem) {
+            // If the item already exists in the cart, increment its quantity
+            existingItem.quantity += newCartItem.quantity;
+        } else {
+            // If the item does not exist in the cart, add it to the cart
+            cart.cartItems.push(newCartItem);
         }
+
+        cart.totalPrice = calculateTotalPrice(cart.cartItems);
+        // Save the changes to the cart
+        await cart.save();
     } catch (error) {
         console.error('Error checking items:', error);
     }
-}
+};
 
 const removeFromCart = asyncHandler(async (req, res) => {
     try {

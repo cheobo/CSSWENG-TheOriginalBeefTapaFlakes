@@ -9,7 +9,7 @@ const cartItemSchema = mongoose.Schema(
         name: {
             type: String,
         },
-        chosenPackage: {
+        selectedPackage: {
             type: String,
         },
         size: {

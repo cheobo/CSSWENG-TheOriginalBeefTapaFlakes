@@ -7,9 +7,10 @@ import {
     clearCart
 } from "../controllers/cartController.js";
 
+import { protect } from "../middlewares/authenticationMiddleware.js";
 const router = express.Router();
 
-router.post("/add", addToCart);
+router.post("/add", protect, addToCart);
 router.delete("/remove/:id", removeFromCart);
 router.put("/update/:id", updateCartItem);
 router.get("/:userId", getCart);

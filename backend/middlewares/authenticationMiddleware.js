@@ -1,16 +1,17 @@
-import asyncHandler from "./asyncHandler.js";
 import jwt from "jsonwebtoken";
+import asyncHandler from "./asyncHandler.js";
 import User from "../models/userModel.js";
 
 const protect = asyncHandler(async (req, res, next) => {
-    const token = req.cookies.jwt;
-
-    if (token) {
+    // Get the token from the Authorization header
+    const authorizationHeader = req.headers.authorization;
+    if (authorizationHeader && authorizationHeader.startsWith("Bearer ")) {
+        const token = authorizationHeader.substring(7); // Remove "Bearer " prefix
         try {
+            // Verify the token and decode its payload
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-            req.user = await User.findById(decoded.userId).select("-password");
-
+            // Fetch user from database using the decoded userId
+            req.user = await User.findById(decoded._id).select("-password");
             next();
         } catch (error) {
             res.status(401);
@@ -18,7 +19,7 @@ const protect = asyncHandler(async (req, res, next) => {
         }
     } else {
         res.status(401);
-        throw new Error("Not authorized, no token")
+        throw new Error("Not authorized, no token");
     }
 });
 
