@@ -1,4 +1,40 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
+
+const packageSchema = mongoose.Schema({
+  packageOption: {
+    type: String,
+    required: true
+  },
+
+  packageSize: {
+    type: Number, // Assuming the size is in grams or milliliters
+    required: true
+  },
+
+  bottlesPerFlavor: [{
+    flavor: {
+      type: String,
+      required: true
+    },
+
+  quantity: {
+      type: Number,
+      required: true
+    },
+  }],
+
+  price: {
+    type: mongoose.Types.Decimal128,
+    required: true,
+    default: 0.0,
+  },
+});
+
+// Define a virtual field for totalBottles
+packageSchema.virtual('totalBottles').get(function() {
+  // Sum the quantities of all flavors
+  return this.bottlesPerFlavor.reduce((total, flavor) => total + flavor.quantity, 0);
+});
 
 const reviewSchema = mongoose.Schema(
   {
@@ -33,7 +69,13 @@ const productSchema = mongoose.Schema(
     },
 
     image: {
-      type: Schema.Types.ObjectId,
+      type: String,
+      required: false,
+    },
+
+    imageId: {
+      type: String,
+      required: false,
     },
 
     description: {
@@ -55,16 +97,7 @@ const productSchema = mongoose.Schema(
       default: 0,
     },
 
-    price: {
-      type: [mongoose.Types.Decimal128],
-      required: true,
-      default: 0.0,
-    },
-
-    package: {
-      type: [String],
-      required: true,
-    },
+    packages: [packageSchema],
 
     countInStock: {
         type: Number,
