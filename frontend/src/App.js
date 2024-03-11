@@ -9,9 +9,7 @@ import About from './Components/Views/About.jsx';
 import Cart from './Components/Views/Cart.jsx';
 import Footer from './Components/Footer/Dulo.jsx';
 
-
-import Product1 from './Components/Views/Products/Product1_Views.jsx';
-import Product2 from './Components/Views/Products/Product2_Views.jsx';
+import ProductPage from './Components/Views/Products/ProductPage_Views.jsx'
 
 import Login from './Components/Views/Login/Login_Views.jsx';
 import Register from './Components/Views/Register/Register_Views.jsx';
@@ -26,9 +24,8 @@ function App() {
       		<Navbar/>
       		<Routes>
       		<Route path='/' element={<Home />} />
+				<Route path='/products/:productId' element={<ProductPage/>} />
           		<Route path='/products' element={<Products category="list" />} />
-          		<Route path='/product1' element={<Product1 />} /> 
-          		<Route path='/product2' element={<Product2 />} />
           		<Route path='/search' element={<Products category="search" />} />
           		<Route path='/partners/resellers' element={<Partners category="resellers" />} />
           		<Route path='/partners/sponsors' element={<Partners category="sponsors" />} />

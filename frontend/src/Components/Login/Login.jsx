@@ -8,18 +8,22 @@ const Login = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:5000/api/users/login', {
-
+            const response = await fetch('http://localhost:5000/api/users/authenticate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
             });
 
-            if(response.status !== 400)
-                redirectTo('/');
+            if (response.status !== 400) {
+                const authentication = await response.json();
 
-            if(response.status === 400)
-                alert('Invalid login');
+                localStorage.setItem('jwt', authentication.token);
+                redirectTo('/');
+            }
+
+            if (response.status === 400) {
+                alert('Invalid details');
+            }
         } catch (error) {
             console.error('Login error:', error);
         }
