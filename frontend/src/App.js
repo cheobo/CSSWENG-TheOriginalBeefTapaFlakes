@@ -6,14 +6,13 @@ import Products from './Components/Views/ProductList_Views/ProductList_Views.jsx
 import ProductList from './Components/ProductList/ProductList.jsx'
 import Partners from './Components/Views/Partners.jsx';
 import About from './Components/Views/About.jsx';
-import Cart from './Components/Views/Cart.jsx';
-import Footer from './Components/Footer/Dulo.jsx';
 
 import ProductPage from './Components/Views/Products/ProductPage_Views.jsx'
 
 import Login from './Components/Views/Login/Login_Views.jsx';
 import Register from './Components/Views/Register/Register_Views.jsx';
 import ForgotPassword from './Components/Views/ForgotPassword_Views/ForgotPassword_Views.jsx';
+import Cart from './Components/Views/Cart/Cart.jsx';
 
 {/*import AdminDashboard from './Components/Views/Admin/Admin.jsx';*/}
 
