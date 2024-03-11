@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './ProductPage.css';
 
-import { PRODUCT_URL } from '../../API/constants';
+import { PRODUCT_URL,
+        CARTS_URL } from '../../API/constants';
 import axiosInstance from '../../API/axiosInstance.js';
+import Cart from '../Views/Cart/Cart.jsx';
 
 const Product = () => {
     // Scroll to top on mount
@@ -23,6 +25,7 @@ const Product = () => {
                 const response = await axiosInstance.get(`${PRODUCT_URL}/${productId}`, {
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
                     },
                 });
 
@@ -52,15 +55,51 @@ const Product = () => {
     };
 
     // Function that displays an error message if the user hasn't selected a package
-    const handleAddToCart = () => {
+    // Function that adds the selected product to the cart
+    
+    const handleAddToCart = async () => {
+        const token = localStorage.getItem('jwt');
+        if (!token) {
+            // Handle case where JWT token is not present
+            console.error('JWT token not found in localStorage');
+            return;
+        }
+        const productId = window.location.pathname.split('/').pop();
+        const packageData = product.packages.find((pkg) => pkg.packageOption === selectedPackage)
         if (!selectedPackage) {
             setWarningMessage('Please select a package');
             setShowWarning(true);
         } else {
-            // Proceed with add to cart functionality
-            setShowWarning(false);
-            console.log('Product added to cart:', { selectedPackage, quantity });
-            // Add to cart logic here
+            setShowWarning(false); // Reset warning message
+            try {
+                // Prepare the cart item data
+                const cartItem = {
+                    product: productId,
+                    name: product.name,
+                    selectedPackage: selectedPackage,
+                    packageSize: packageData.packageSize,
+                    price: packageData.price,
+                    quantity: quantity,
+                };
+                // Make a POST request to add the item to the cart
+                const response = await axiosInstance.post(`${CARTS_URL}/add`, cartItem, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                // Check if the request was successful
+                if (response.status === 201) {
+                    console.log('Product added to cart:', cartItem);
+                    // TODO: show success mesage
+                } else {
+                    throw new Error(response.data.error || 'Failed to add product to cart');
+                }
+            } catch (error) {
+                console.error('Error adding product to cart:', error.message);
+                // Optionally, you can display an error message to the user
+            }
         }
     };
 
@@ -117,7 +156,7 @@ const Product = () => {
                                 name="quantity"
                                 min="1"
                                 value={quantity}
-                                onChange={(e) => setQuantity(e.target.value)}
+                                onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
                             />
                         </div>
                         {showWarning && <div className="p-error-bubble">{warningMessage}</div>}

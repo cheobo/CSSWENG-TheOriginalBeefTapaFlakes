@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Login.css';
+import { USERS_URL } from '../../API/constants';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -14,9 +15,8 @@ const Login = () => {
                 body: JSON.stringify({ email, password })
             });
 
-            if (response.status !== 400) {
+            if (response.status === 200) {
                 const authentication = await response.json();
-
                 localStorage.setItem('jwt', authentication.token);
                 redirectTo('/');
             }
