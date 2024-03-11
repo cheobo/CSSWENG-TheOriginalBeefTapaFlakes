@@ -6,35 +6,32 @@ import Products from './Components/Views/ProductList_Views/ProductList_Views.jsx
 import ProductList from './Components/ProductList/ProductList.jsx'
 import Partners from './Components/Views/Partners.jsx';
 import About from './Components/Views/About.jsx';
-import Cart from './Components/Views/Cart.jsx';
 
-
-import Product1 from './Components/Views/Products/Product1_Views.jsx';
-import Product2 from './Components/Views/Products/Product2_Views.jsx';
+import ProductPage from './Components/Views/Products/ProductPage_Views.jsx'
 
 import Login from './Components/Views/Login/Login_Views.jsx';
 import Register from './Components/Views/Register/Register_Views.jsx';
 import ForgotPassword from './Components/Views/ForgotPassword_Views/ForgotPassword_Views.jsx';
+import Cart from './Components/Views/Cart/Cart.jsx';
 
 import AdminDashboard from './Components/Views/Admin/Admin.jsx';
 
 function App() {
 	return (
-		<div className="App">
-			<BrowserRouter>
-				<Navbar />
-				<Routes>
-					<Route path='/' element={<Home />} />
-					<Route path='/products' element={<Products category="list" />} />
-					<Route path='/product1' element={<Product1 />} />
-					<Route path='/product2' element={<Product2 />} />
-					<Route path='/search' element={<Products category="search" />} />
-					<Route path='/partners/resellers' element={<Partners category="resellers" />} />
-					<Route path='/partners/sponsors' element={<Partners category="sponsors" />} />
-					<Route path='/about/contact' element={<About category="contact" />} />
-					<Route path='/about/faq' element={<About category="faq" />} />
-					<Route path='/about/terms' element={<About category="terms" />} />
-					<Route path='/about/refund' element={<About category="refund" />} />
+    	<div className="App">
+      		<BrowserRouter>
+      		<Navbar/>
+      		<Routes>
+      		<Route path='/' element={<Home />} />
+				<Route path='/products/:productId' element={<ProductPage/>} />
+          		<Route path='/products' element={<Products category="list" />} />
+          		<Route path='/search' element={<Products category="search" />} />
+          		<Route path='/partners/resellers' element={<Partners category="resellers" />} />
+          		<Route path='/partners/sponsors' element={<Partners category="sponsors" />} />
+          		<Route path='/about/contact' element={<About category="contact" />} />
+          		<Route path='/about/faq' element={<About category="faq" />} />
+          		<Route path='/about/terms' element={<About category="terms" />} />
+          		<Route path='/about/refund' element={<About category="refund" />} />
 
 					<Route path='/admin-dashboard' element={<AdminDashboard />} />
 

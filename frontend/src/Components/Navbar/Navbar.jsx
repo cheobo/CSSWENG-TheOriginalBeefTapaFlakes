@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { decodeToken } from 'react-jwt';
 import './Navbar.css';
 import logoMain from '../../Assets/logo_main.png';
 import cartIcon from '../../Assets/cart_icon.png';
@@ -7,6 +8,8 @@ import userIcon from '../../Assets/user.png';
 import menuIcon from '../../Assets/menu.png';
 
 const Navbar = () => {
+    const token = decodeToken(localStorage.getItem('jwt'));
+
     const [openDropdown, setOpenDropdown] = useState(null);
 
     const handleDropdownToggle = (dropdownId) => {
@@ -50,10 +53,14 @@ const Navbar = () => {
                     <img src={cartIcon} alt="Cart" className='cart-img' onClick={() => redirectTo('/cart')} />
                     <div className="nav-cart-count">1</div>
                     <img src={searchIcon} alt="Search" className='search-img' />
-					<DropdownButton id="user" title={<img src={userIcon} alt="User" className='user-img'/>} openDropdown={openDropdown} onToggle={handleDropdownToggle}>
+                    <DropdownButton id="user" title={<img src={userIcon} alt="User" className='user-img'/>} openDropdown={openDropdown} onToggle={handleDropdownToggle}>
                         <DropdownMenuIcon>
-                            <button onClick={() => redirectTo('/login')}>Login</button>
-                            <button onClick={() => redirectTo('/register')}>Register</button>
+                            {token ? <button onClick={handleLogout}>Logout</button> : (
+                                <>
+                                    <button onClick={() => redirectTo('/login')}>Login</button>
+                                    <button onClick={() => redirectTo('/register')}>Register</button>
+                                </>
+                            )}
                         </DropdownMenuIcon>
                     </DropdownButton>
                     <img src={menuIcon} alt="Menu" className='menu-img' />
@@ -89,5 +96,18 @@ const DropdownMenuIcon = ({ children }) => (
         {children}
     </div>
 );
+
+const handleLogout = async () => {
+    try {
+        const response = await fetch('http://localhost:5000/api/users/logout', { method: 'POST' });
+
+        if (response.status === 200) {
+            localStorage.removeItem('jwt');
+            redirectTo("/login");
+        }
+    } catch (error) {
+        console.log('Logout error: ', error);
+    }
+};
 
 export default Navbar;

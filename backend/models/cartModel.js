@@ -9,11 +9,11 @@ const cartItemSchema = mongoose.Schema(
         name: {
             type: String,
         },
-        flavor: {
+        chosenPackage: {
             type: String,
         },
         size: {
-            type: String,
+            type: Number,
         },
         price: {
             type: mongoose.Types.Decimal128,
