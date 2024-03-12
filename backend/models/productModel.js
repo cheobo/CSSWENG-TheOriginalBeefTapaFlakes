@@ -36,11 +36,6 @@ const packageSchema = mongoose.Schema({
 },
 });
 
-// Define a virtual field for totalBottles
-packageSchema.virtual('totalBottles').get(function() {
-  // Sum the quantities of all flavors
-  return this.bottlesPerFlavor.reduce((total, flavor) => total + flavor.quantity, 0);
-});
 
 const reviewSchema = mongoose.Schema(
   {
