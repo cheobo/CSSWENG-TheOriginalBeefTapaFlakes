@@ -4,11 +4,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './Components/Views/Home/Home.jsx';
 import Products from './Components/Views/ProductList_Views/ProductList_Views.jsx';
 import ProductList from './Components/ProductList/ProductList.jsx'
-import Partners from './Components/Views/Partners.jsx';
-import About from './Components/Views/About.jsx';
-
+import Partners from './Components/Views/Partners/Partners.jsx';
+import About from './Components/Views/About/About.jsx';
 import ProductPage from './Components/Views/Products/ProductPage_Views.jsx'
-
 import Login from './Components/Views/Login/Login_Views.jsx';
 import Register from './Components/Views/Register/Register_Views.jsx';
 import ForgotPassword from './Components/Views/ForgotPassword_Views/ForgotPassword_Views.jsx';
