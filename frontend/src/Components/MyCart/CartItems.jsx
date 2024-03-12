@@ -1,40 +1,153 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import prod from '../../Assets/flakes.png';
 import './CartItems.css';
 import addIcon from '../../Assets/add.png';
 import minusIcon from '../../Assets/minus.png';
-import deleteIcon from '../../Assets/delete.png'
+import deleteIcon from '../../Assets/delete.png';
 import { Link } from 'react-router-dom';
+import { CARTS_URL, PRODUCT_URL } from '../../API/constants';
+import axiosInstance from '../../API/axiosInstance.js';
+import Cart from '../Views/Cart/Cart.jsx';
 
 const CartItems = () => {
-  const [items, setItems] = useState([
-    { id: 1, quantity: 1, title: 'Product 1', price: 100 },
-    { id: 2, quantity: 2, title: 'Product 2', price: 600 },
-    { id: 3, quantity: 3, title: 'Product 3', price: 300 },
-    { id: 4, quantity: 2, title: 'Product 4', price: 700 },
-    { id: 5, quantity: 7, title: 'Product 5', price: 900 },
-    { id: 6, quantity: 5, title: 'Product 5', price: 900 },
-  ]);
+  const [cart, setCart] = useState();
+  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState([]);
+  const [subtotal, setSubtotal] = useState(0);
 
-  const handleAdd = () => {
-    // ADD
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      const token = localStorage.getItem('jwt');
+      if (!token) {
+        console.error('JWT token not found in localStorage');
+        return;
+      }
+      try {
+        const response = await axiosInstance.get(`${CARTS_URL}/`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.status !== 200) {
+          throw new Error('Failed to fetch cart items');
+        }
+
+        setCart(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching cart items:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchCartItems();
+  }, []);
+
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      if (!cart) return;
+
+      const productIds = cart.cartItems.map(item => item.productId);
+      try {
+        const token = localStorage.getItem('jwt');
+        const responses = await Promise.all(
+          productIds.map(productId =>
+            axiosInstance.get(`${PRODUCT_URL}/${productId}`, {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+            })
+          )
+        );
+        const productsData = responses.map(response => response.data);
+        setProducts(productsData);
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      }
+    };
+
+    fetchProductDetails();
+  }, [cart]);
+
+  const cartItems = cart ? cart.cartItems : [];
+
+  const handleDelete = async (id) => {
+    try {
+      const token = localStorage.getItem('jwt');
+      const response = await axiosInstance.delete(`${CARTS_URL}/remove/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      if (response.status !== 200) {
+        throw new Error('Failed to remove item from cart');
+      }
+  
+      // Filter out the deleted item from the cartItems state
+      const updatedCart = cartItems.filter(item => item._id !== id);
+      setCart({ ...cart, cartItems: updatedCart }); // Update cart with the new cartItems
+    } catch (error) {
+      console.error('Error removing item from cart:', error);
+    }
   };
 
-  const handleDelete = (id) => {
-    // DELETE
-  };
-
-  const handleQuantityChange = (id, change) => {
-    setItems(items.map(item => item.id === id ? {...item, quantity: item.quantity + change} : item));
+  const handleQuantityChange = async (id, change) => {
+    try {
+      const token = localStorage.getItem('jwt');
+      const cartItem = cartItems.find(item => item._id === id);
+      if (!cartItem) return; // Guard against undefined cartItem
+  
+      const newQuantity = cartItem.quantity + change;
+  
+      if (newQuantity <= 0) {
+        // If new quantity is zero or negative, remove the item from the cart
+        await handleDelete(id);
+        return;
+      }
+  
+      const response = await axiosInstance.put(`${CARTS_URL}/update/${id}`, {
+        newQuantity,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      if (response.status !== 200) {
+        throw new Error('Failed to update quantity');
+      }
+  
+      // Update the local state with the updated quantity
+      const updatedCartItems = cartItems.map(item =>
+        item._id === id ? { ...item, quantity: newQuantity } : item
+      );
+      setCart({ ...cart, cartItems: updatedCartItems }); // Update cart with the updated cartItems
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+    }
   };
 
   const handleCheckout = () => {
     // CHECKOUT
   };
 
-  const subtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
+  useEffect(() => {
+    const subtotal = cartItems.reduce((acc, item) => {
+      return acc + (parseFloat(item.price?.$numberDecimal ?? 0) * item.quantity);
+    }, 0);
+    
+    setSubtotal(subtotal);
+  }, [cartItems]);
+
   const shippingCost = 50;
-  const total = subtotal + shippingCost;
+  const total = parseFloat(subtotal) + parseFloat(shippingCost);
+
 
   return (
     <div className="grid-container">
@@ -43,49 +156,53 @@ const CartItems = () => {
           <div className="cart-container">
             <div className="flex-container">
               <div className="items-container">
-                {items.map((item) => (
-                  <div key={item.id} className="item">
-                    <img src={prod} alt={item.title} />
-                    <div className="item-details">
-                      <p> {item.title}</p>
-                      <div className="price-quantity-container">
-                        <div className="price-container">
-                          <p> PHP {item.price}</p>
-                        </div>
-                        <div className="quantity-container">
-                          <button className="quantity-btn" onClick={() => handleQuantityChange(item.id, -1)}>
-                            <img src={minusIcon} alt="minus"/>
+                {cartItems.map((item, index) => {
+                  const product = products.find(product => product._id === item.productId);
+                  const imageUrl = product ? product.image : " "; // Default image if product not found
+                  return (
+                    <div key={index} className="item">
+                      <img src={`http://localhost:5000/${imageUrl}`} alt={item.name} />
+                      <div className="item-details">
+                        <p> {item.name}</p>
+                        <div className="price-quantity-container">
+                          <div className="price-container">
+                            <p> PHP {parseFloat(item.price.$numberDecimal).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })}</p>
+                          </div>
+                          <div className="quantity-container">
+                            <button className="quantity-btn" onClick={() => handleQuantityChange(item._id, -1)}>
+                              <img src={minusIcon} alt="minus" />
+                            </button>
+                            <div className="quantity-value">{item.quantity}</div>
+                            <button className="quantity-btn" onClick={() => handleQuantityChange(item._id, 1)}>
+                              <img src={addIcon} alt="add" />
+                            </button>
+                          </div>
+                          <button className="delete-btn" onClick={() => handleDelete(item._id)}>
+                            <img src={deleteIcon} alt="delete" />
                           </button>
-                          <div className="quantity-value">{item.quantity}</div>
-                          <button className="quantity-btn" onClick={() => handleQuantityChange(item.id, 1)}>
-                            <img src={addIcon} alt="add"/>
-                          </button>
                         </div>
-                        <button className="delete-btn" onClick={() => handleDelete(item.id)}>
-                        <img src={deleteIcon} alt="delete"/>
-                        </button>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
                 <Link to={'/products'}>
-                    <button className="btn add-btn" onClick={handleAdd}>Add Item</button>
+                  <button className="btn add-btn">Add Item</button>
                 </Link>
               </div>
               <div className="checkout-container">
                 <h2>Order Summary</h2>
                 <h3>In cart:</h3>
                 <div className="cart-items">
-                  {items.map((item) => (
-                    <p key={item.id}>
-                      {item.title} ({item.quantity}) - PHP {item.price * item.quantity}
+                  {cartItems.map((item, index) => (
+                    <p key={index}>
+                      {item.name} {item.selectedPackage} ({item.quantity} * {parseFloat(item.price.$numberDecimal.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }))}) - {parseFloat(item.price.$numberDecimal * item.quantity).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })}
                     </p>
                   ))}
                 </div>
                 <div className="totals">
-                  <p><strong>Subtotal:</strong> PHP {subtotal}</p>
-                  <p><strong>Shipping Cost:</strong> PHP {shippingCost}</p>
-                  <p><strong>Total:</strong> PHP {total}</p>
+                  <p><strong>Subtotal:</strong> {subtotal.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })}</p>
+                  <p><strong>Shipping Cost:</strong> {shippingCost.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })}</p>
+                  <p><strong>Total:</strong> {total.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })}</p>
                 </div>
                 <button className="btn checkout-btn" onClick={handleCheckout}>Checkout</button>
               </div>

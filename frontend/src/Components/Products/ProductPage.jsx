@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ProductPage.css';
-
-import { PRODUCT_URL,
-        CARTS_URL } from '../../API/constants';
+import { Link } from 'react-router-dom';
+import { PRODUCT_URL, CARTS_URL } from '../../API/constants';
 import axiosInstance from '../../API/axiosInstance.js';
 import Cart from '../Views/Cart/Cart.jsx';
 
@@ -17,6 +16,8 @@ const Product = () => {
     const [quantity, setQuantity] = useState(1);
     const [warningMessage, setWarningMessage] = useState('');
     const [showWarning, setShowWarning] = useState(false);
+    const [token, setToken] = useState(localStorage.getItem('jwt')); 
+    const [addedToCartMessage, setAddedToCartMessage] = useState('');
 
     useEffect(() => {
         const handleFetchProduct = async () => {
@@ -58,7 +59,6 @@ const Product = () => {
     // Function that adds the selected product to the cart
     
     const handleAddToCart = async () => {
-        const token = localStorage.getItem('jwt');
         if (!token) {
             // Handle case where JWT token is not present
             console.error('JWT token not found in localStorage');
@@ -74,10 +74,10 @@ const Product = () => {
             try {
                 // Prepare the cart item data
                 const cartItem = {
-                    product: productId,
+                    productId: productId,
                     name: product.name,
                     selectedPackage: selectedPackage,
-                    packageSize: packageData.packageSize,
+                    size: packageData.packageSize,
                     price: packageData.price,
                     quantity: quantity,
                 };
@@ -92,7 +92,11 @@ const Product = () => {
                 // Check if the request was successful
                 if (response.status === 201) {
                     console.log('Product added to cart:', cartItem);
-                    // TODO: show success mesage
+                    setAddedToCartMessage('Product added to cart successfully!');
+                    // Reset the message after 3 seconds
+                    setTimeout(() => {
+                        setAddedToCartMessage('');
+                    }, 3000);
                 } else {
                     throw new Error(response.data.error || 'Failed to add product to cart');
                 }
@@ -101,6 +105,15 @@ const Product = () => {
                 // Optionally, you can display an error message to the user
             }
         }
+    };
+
+    const getTotalBottles = (pkgIndex) => {
+        if (pkgIndex === -1) return null;
+        let total = 0;
+        product.packages[pkgIndex].bottlesPerFlavor.forEach((bottle) => {
+                total += bottle.quantity;
+            });
+        return total;
     };
 
     return (
@@ -112,7 +125,7 @@ const Product = () => {
                     </div>
                     <div className="product-details">
                         <h1>{product.name}</h1>
-                        <p className="p-amount">{product.totalBottles}</p>
+                        <p className="p-amount">{getTotalBottles(product.packages.findIndex((pkg) => pkg.packageOption === selectedPackage))} Bottles/Box</p>
                         <p className="p-price">
                             {selectedPackage ? getPrice(product.packages.find((pkg) => pkg.packageOption === selectedPackage).price) : 'Select a package'}
                         </p>
@@ -164,9 +177,14 @@ const Product = () => {
                             <li>Ingredients: {product.ingredients}</li>
                             <li>Nutritional Info: {product.nutriInfo}</li>
                         </ul>
-                        <button className="p-add-to-cart" onClick={handleAddToCart}>
-                            ADD TO CART
-                        </button>
+                        {token ? (
+                            <button className="p-add-to-cart" onClick={handleAddToCart}>ADD TO CART</button>
+                        ) : (
+                            <Link to={'/login'}>
+                                <button className="p-add-to-cart">ADD TO CART</button>
+                            </Link>
+                        )}
+                        {addedToCartMessage && <div className="p-success-message">{addedToCartMessage}</div>}
                     </div>
                 </div>
             )}

@@ -140,6 +140,11 @@
     border-color: #007bff;
 }
 
+.p-success-message {
+    text-align: center;
+    color: green;
+}
+
 /* Responsive layout for smaller screens */
 @media (max-width: 768px) {
     .product-container {

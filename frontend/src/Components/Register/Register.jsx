@@ -6,9 +6,21 @@ const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [emailError, setEmailError] = useState('');
+
+    const validateEmail = (email) => {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailRegex.test(email);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        if (!validateEmail(email)) {
+            setEmailError('Please enter a valid email address');
+            return;
+        }
+
         try {
             const response = await fetch('http://localhost:5000/api/users/register', {
                 method: 'POST',
@@ -47,6 +59,7 @@ const Register = () => {
                         <label htmlFor="email">Email Address *</label>
                         <input type="email" className="register-input-field" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                     </div>
+                    {emailError && <p className="error-message">{emailError}</p>}
                     <div className="register-input-group">
                         <label htmlFor="username">Username *</label>
                         <input type="username" className="register-input-field" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required />

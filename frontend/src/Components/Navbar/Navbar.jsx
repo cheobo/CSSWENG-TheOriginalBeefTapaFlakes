@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { decodeToken } from 'react-jwt';
 import './Navbar.css';
 import logoMain from '../../Assets/logo_main.png';
@@ -6,15 +6,73 @@ import cartIcon from '../../Assets/cart_icon.png';
 import searchIcon from '../../Assets/search.png';
 import userIcon from '../../Assets/user.png';
 import menuIcon from '../../Assets/menu.png';
+import { CARTS_URL } from '../../API/constants';
+import axiosInstance from '../../API/axiosInstance.js';
 
 const Navbar = () => {
     const token = decodeToken(localStorage.getItem('jwt'));
-
+    const [cart, setCart] = useState();
+    const [cartItemCount, setCartItemCount] = useState(0);
+    
+    const [loading, setLoading] = useState(true);
     const [openDropdown, setOpenDropdown] = useState(null);
 
     const handleDropdownToggle = (dropdownId) => {
         setOpenDropdown(openDropdown === dropdownId ? null : dropdownId);
     };
+
+    useEffect(() => {
+        const fetchCartItems = async () => {
+          const token = localStorage.getItem('jwt');
+          if (!token) {
+            console.error('JWT token not found in localStorage');
+            return;
+          }
+          try {
+            const response = await axiosInstance.get(`${CARTS_URL}/`, {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+            });
+    
+            if (response.status !== 200) {
+              throw new Error('Failed to fetch cart items');
+            }
+    
+            setCart(response.data);
+            setLoading(false);
+          } catch (error) {
+            console.error('Error fetching cart items:', error);
+            setLoading(false);
+          }
+        };
+    
+        fetchCartItems();
+      }, []);
+
+    useEffect(() => {
+        const fetchCartItemCount = async () => {
+            try {
+                const response = await axiosInstance.get(`${CARTS_URL}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('jwt')}`
+                    }
+                });
+                
+                if (response.status === 200) {
+                    const data = response.data;
+                    setCartItemCount(data.cartItems.length);
+                } else {
+                    setCartItemCount(0);
+                }
+            } catch (error) {
+                console.log('Error fetching cart item count:', error);
+            }
+        };
+
+        fetchCartItemCount();
+    }, [cart]);
 
     return (
         <div className='navbar'>
@@ -51,7 +109,7 @@ const Navbar = () => {
 
                 <div className="nav-login-cart">
                     <img src={cartIcon} alt="Cart" className='cart-img' onClick={() => redirectTo('/cart')} />
-                    <div className="nav-cart-count">1</div>
+                    <div className="nav-cart-count">{cartItemCount}</div>
                     <img src={searchIcon} alt="Search" className='search-img' />
                     <DropdownButton id="user" title={<img src={userIcon} alt="User" className='user-img'/>} openDropdown={openDropdown} onToggle={handleDropdownToggle}>
                         <DropdownMenuIcon>
