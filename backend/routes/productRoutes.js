@@ -10,6 +10,6 @@ const router = express.Router();
 router.get("/", getProducts);
 router.get("/:productId", getProductById);
 
-router.put("/:productId", updateProductInventory);
+router.put("/:productId/:packageId", updateProductInventory);
 
 export default router;
