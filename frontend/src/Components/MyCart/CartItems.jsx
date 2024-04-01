@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Modal } from 'react-bootstrap';
 import prod from '../../Assets/flakes.png';
 import './CartItems.css';
 import addIcon from '../../Assets/add.png';
@@ -40,6 +41,7 @@ const CartItems = () => {
         console.error('Error fetching cart items:', error);
         setLoading(false);
       }
+      
     };
 
     fetchCartItems();
@@ -73,6 +75,8 @@ const CartItems = () => {
   }, [cart]);
 
   const cartItems = cart ? cart.cartItems : [];
+
+  const [showModal, setShowModal] = useState(false);
 
   const handleDelete = async (id) => {
     try {
@@ -134,7 +138,18 @@ const CartItems = () => {
   };
 
   const handleCheckout = () => {
-    // CHECKOUT
+    document.body.classList.add('modal-open');
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    document.body.classList.remove('modal-open');
+    setShowModal(false);
+  };
+
+  const handleConfirmCheckout = () => {
+    document.body.classList.remove('modal-open');
+    setShowModal(false);
   };
 
   useEffect(() => {
@@ -147,7 +162,6 @@ const CartItems = () => {
 
   const shippingCost = 50;
   const total = parseFloat(subtotal) + parseFloat(shippingCost);
-
 
   return (
     <div className="grid-container">
@@ -210,6 +224,16 @@ const CartItems = () => {
           </div>
         </div>
       </div>
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Checkout</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to proceed to the checkout page?</Modal.Body>
+        <Modal.Footer>
+          <button className="btn" onClick={handleCloseModal}>Cancel</button>
+          <button className="btn" onClick={handleConfirmCheckout}>Confirm</button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
