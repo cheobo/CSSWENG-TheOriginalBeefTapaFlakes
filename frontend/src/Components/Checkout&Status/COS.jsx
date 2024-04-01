@@ -63,7 +63,14 @@ const COS = () => {
       </div>
       <div className="div3">
         <p><strong>Contact Details:</strong></p>
-        <p>Testing</p>
+        <p>BDO Savings - 005430247449 (Kristine Gail Sandoval)</p>
+        <p>RCBC Checking/ RCBC Diskartech - 7590702855</p>
+        <p>(Kristine Gail Sandoval-Zamora)</p>
+        <p>Limited BPI to BPI Only - 8489340519</p>
+        <p>(Kristine Gail Sandoval)</p>
+        <p>GCash - 0963 690 9006 (Kristine Gail Sandoval)</p>
+        <p>Alternative GCash - 0917 426 4330 (Raul Zamora Jr.)</p>
+        <p>UnionBank Savings - 1093 4042 0640 (Kristine Gail Sandoval)</p>
       </div>
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
