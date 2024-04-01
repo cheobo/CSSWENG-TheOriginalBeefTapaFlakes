@@ -70,3 +70,18 @@ h2 {
 .login:hover {
     text-decoration: underline;
 }
+
+.error-message {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: red;
+    font-weight: bold;
+}
+
+.login-error-message {
+    text-align: center;
+    
+    color: red;
+    font-weight: bold;
+}

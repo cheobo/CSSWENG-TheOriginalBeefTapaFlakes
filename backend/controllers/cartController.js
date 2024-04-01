@@ -46,6 +46,7 @@ const checkItems = async (cart, newCartItem) => {
         // Check if the newCartItem already exists in the cart
         const existingItem = cart.cartItems.find(
             (item) =>
+                item.productId.toString() === newCartItem.productId &&
                 item.selectedPackage === newCartItem.selectedPackage
         );
 
@@ -68,7 +69,7 @@ const checkItems = async (cart, newCartItem) => {
 const removeFromCart = asyncHandler(async (req, res) => {
     try {
         // Find the user's cart
-        const userCart = await Cart.findOne({ user: req.body.userId}); // change to "req.user._id" after implementing user authentication 
+        const userCart = await Cart.findOne({ user: req.user._id}); 
         const itemId = req.params.id; // Extract itemId from the request parameters
 
         // If the cart exists, clear it
@@ -94,7 +95,7 @@ const removeFromCart = asyncHandler(async (req, res) => {
 
 const updateCartItem = asyncHandler(async (req, res) => {
     try {
-        const userId = req.body.userId // change to "req.user._id" after implementing user authentication 
+        const userId = req.user._id 
         const itemId = req.params.id; // Extract itemId from the request parameters
         const newQuantity = req.body.newQuantity; // Extract newQuantity from the request body
 
@@ -130,12 +131,10 @@ const updateCartItem = asyncHandler(async (req, res) => {
 });
 
 const getCart = asyncHandler(async (req, res) => {
-    const userId = req.params.userId // Change to "req.user._id" after implementing user authentication 
+    const userId = req.user._id 
 
-    console.log(userId)
     // Find the cart for the current user
     const userCart = await Cart.findOne({ user: userId });
-    console.log(userCart)
     if (!userCart) {
         res.status(404).json({ message: 'Cart not found for this user' });
     } else {

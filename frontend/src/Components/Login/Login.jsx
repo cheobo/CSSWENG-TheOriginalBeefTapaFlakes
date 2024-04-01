@@ -5,6 +5,7 @@ import { USERS_URL } from '../../API/constants';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loginError, setLoginError] = useState('');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -22,7 +23,7 @@ const Login = () => {
             }
 
             if (response.status === 400) {
-                alert('Invalid details');
+                setLoginError('Invalid email or password');
             }
         } catch (error) {
             console.error('Login error:', error);
@@ -45,6 +46,7 @@ const Login = () => {
                         </div>
                         <button type="submit" className="login-button">LOG IN</button>
                         <a href="/forgot-password" className="forgot-password">Forgot password?</a>
+                        {loginError && <p className="login-error-message">{loginError}</p>}
                     </form>
                 </section>
                 <section className="new-customer-section">
