@@ -16,7 +16,7 @@ import orderRoutes from "./routes/orderRoutes.js";
 if (process.env.NODE_ENV !== 'production') {
     dotenv.config()
 }
-connectDB(); // Connect MongoDB
+connectDB(process.env.MONGO_URI); // Connect MongoDB
 
 const app = express()
 
