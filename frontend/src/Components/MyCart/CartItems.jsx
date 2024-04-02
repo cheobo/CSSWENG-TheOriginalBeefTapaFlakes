@@ -6,9 +6,10 @@ import addIcon from '../../Assets/add.png';
 import minusIcon from '../../Assets/minus.png';
 import deleteIcon from '../../Assets/delete.png';
 import { Link } from 'react-router-dom';
-import { CARTS_URL, PRODUCT_URL } from '../../API/constants';
+import { CARTS_URL, PRODUCT_URL, ORDERS_URL } from '../../API/constants';
 import axiosInstance from '../../API/axiosInstance.js';
 import Cart from '../Views/Cart/Cart.jsx';
+import { decodeToken } from 'react-jwt';
 
 const CartItems = () => {
   const [cart, setCart] = useState();
@@ -147,9 +148,39 @@ const CartItems = () => {
     setShowModal(false);
   };
 
-  const handleConfirmCheckout = () => {
+  const handleConfirmCheckout = async () => {
     document.body.classList.remove('modal-open');
     setShowModal(false);
+
+    const token = localStorage.getItem('jwt');
+
+    if (!token) {
+      console.error('JWT token not found in localStorage');
+      return;
+    }
+
+    const decoded_token = decodeToken(localStorage.getItem('jwt'));
+    const userId = decoded_token._id;
+    const currentDate = new Date();
+
+    try {
+      const response = await fetch("http://localhost:5000/api/orders/addOrder", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, currentDate }),
+      });
+
+      if (response.status === 200) {
+        window.location.href = "/cos";
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to add order');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

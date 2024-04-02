@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import billIcon from '../../Assets/bill.png';
 import './COS.css';
+import {decodeToken} from "react-jwt";
 
 const COS = () => {
   const [showModal, setShowModal] = useState(false);
@@ -26,6 +27,31 @@ const COS = () => {
   const handleOrderNumberChange = (event) => {
     setOrderNumber(event.target.value);
   }
+
+  /*
+  const getOrders = async () => {
+    const token = localStorage.getItem('jwt');
+
+    if (!token) {
+      console.error('JWT token not found in localStorage');
+      return;
+    }
+
+    const decoded_token = decodeToken(localStorage.getItem('jwt'));
+    const userId = decoded_token._id;
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/orders/fetchOrders/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+*/
 
   const [items, setItems] = useState([
     { orderNumber: 1, status: 'Processing' },
