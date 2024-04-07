@@ -14,6 +14,7 @@ import ForgotPassword from './Components/Views/ForgotPassword_Views/ForgotPasswo
 import Cart from './Components/Views/Cart/Cart.jsx';
 import AdminDashboard from './Components/Views/Admin/Admin.jsx';
 import { decodeToken } from 'react-jwt';
+import CheckoutandStatus from './Components/Views/CheckoutandStatus/CS.jsx';
 
 function App() {
     const [token, setToken] = useState(localStorage.getItem('jwt'));
@@ -78,6 +79,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path='/COS' element={<CheckoutandStatus />} />
                 </Routes>
             </BrowserRouter>
         </div>

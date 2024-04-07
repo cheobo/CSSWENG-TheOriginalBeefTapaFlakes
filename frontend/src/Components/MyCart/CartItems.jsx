@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Modal } from 'react-bootstrap';
 import prod from '../../Assets/flakes.png';
 import './CartItems.css';
 import addIcon from '../../Assets/add.png';
 import minusIcon from '../../Assets/minus.png';
 import deleteIcon from '../../Assets/delete.png';
 import { Link } from 'react-router-dom';
-import { CARTS_URL, PRODUCT_URL } from '../../API/constants';
+import { CARTS_URL, PRODUCT_URL, ORDERS_URL } from '../../API/constants';
 import axiosInstance from '../../API/axiosInstance.js';
 import Cart from '../Views/Cart/Cart.jsx';
+import { decodeToken } from 'react-jwt';
 
 const CartItems = () => {
   const [cart, setCart] = useState();
@@ -36,6 +38,7 @@ const CartItems = () => {
         console.error('Error fetching cart items:', error);
         setLoading(false);
       }
+      
     };
 
     fetchCartItems();
@@ -69,6 +72,8 @@ const CartItems = () => {
   }, [cart]);
 
   const cartItems = cart ? cart.cartItems : [];
+
+  const [showModal, setShowModal] = useState(false);
 
   const handleDelete = async (id) => {
     try {
@@ -130,7 +135,48 @@ const CartItems = () => {
   };
 
   const handleCheckout = () => {
-    // CHECKOUT
+    document.body.classList.add('modal-open');
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    document.body.classList.remove('modal-open');
+    setShowModal(false);
+  };
+
+  const handleConfirmCheckout = async () => {
+    document.body.classList.remove('modal-open');
+    setShowModal(false);
+
+    const token = localStorage.getItem('jwt');
+
+    if (!token) {
+      console.error('JWT token not found in localStorage');
+      return;
+    }
+
+    const decoded_token = decodeToken(localStorage.getItem('jwt'));
+    const userId = decoded_token._id;
+    const currentDate = new Date();
+
+    try {
+      const response = await fetch("http://localhost:5000/api/orders/addOrder", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, currentDate }),
+      });
+
+      if (response.status === 200) {
+        window.location.href = "/cos";
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to add order');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -143,7 +189,6 @@ const CartItems = () => {
 
   const shippingCost = 50;
   const total = parseFloat(subtotal) + parseFloat(shippingCost);
-
 
   return (
     <div className="grid-container">
@@ -206,6 +251,16 @@ const CartItems = () => {
           </div>
         </div>
       </div>
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Checkout</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to proceed to the checkout page?</Modal.Body>
+        <Modal.Footer>
+          <button className="btn" onClick={handleCloseModal}>Cancel</button>
+          <button className="btn" onClick={handleConfirmCheckout}>Confirm</button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

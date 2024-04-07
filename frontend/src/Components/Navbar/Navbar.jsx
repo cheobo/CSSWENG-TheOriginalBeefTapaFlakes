@@ -123,7 +123,7 @@ const Navbar = () => {
                             )}
                         </DropdownMenuIcon>
                     </DropdownButton>
-                    <img src={menuIcon} alt="Menu" className='menu-img' />
+                    <img src={menuIcon} alt="Menu" className='menu-img' onClick={() => redirectTo('/COS')} />
                 </div>
             </div>
         </div>
