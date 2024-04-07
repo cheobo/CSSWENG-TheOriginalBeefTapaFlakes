@@ -28,9 +28,11 @@ const ProductList = () => {
 		// Calculate minimum and maximum prices
 		const min = Math.min(...filteredNumericPrices).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
 		const max = Math.max(...filteredNumericPrices).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
-	
+
+		if (min === max) return `${min}`
+
 		// Return the price range as a string
-		return ` ${min} - ${max}`;
+		return `${min} - ${max}`;
 	};
 
 	useEffect(() => {
@@ -63,7 +65,7 @@ const ProductList = () => {
           				<Link to={`/products/${product._id}`} className="product-title">
               				<h3>{product.name}</h3>
             			</Link>
-            			<p><strong>Price Range:{calculateMinMax(product.packages)}</strong></p>
+            			<p className='product-price'><strong>{calculateMinMax(product.packages)}</strong></p>
           			</div>
         		))}
       		</div>

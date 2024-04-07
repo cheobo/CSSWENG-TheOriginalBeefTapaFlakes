@@ -18,10 +18,6 @@ const CartItems = () => {
   useEffect(() => {
     const fetchCartItems = async () => {
       const token = localStorage.getItem('jwt');
-      if (!token) {
-        console.error('JWT token not found in localStorage');
-        return;
-      }
       try {
         const response = await axiosInstance.get(`${CARTS_URL}/`, {
           headers: {
@@ -166,7 +162,7 @@ const CartItems = () => {
                         <p> {item.name}</p>
                         <div className="price-quantity-container">
                           <div className="price-container">
-                            <p> PHP {parseFloat(item.price.$numberDecimal).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })}</p>
+                            <p> {parseFloat(item.price.$numberDecimal).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })}</p>
                           </div>
                           <div className="quantity-container">
                             <button className="quantity-btn" onClick={() => handleQuantityChange(item._id, -1)}>

@@ -49,21 +49,30 @@ const Product = () => {
         setShowWarning(false);
     };
 
-    // Function to dynamically update price based on package
+    // Function to get the price based on package
     const getPrice = (price) => {
         const numericPrice = parseFloat(price.$numberDecimal);
         return numericPrice.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
     };
 
-    // Function that displays an error message if the user hasn't selected a package
-    // Function that adds the selected product to the cart
+    // Function to get the total bottles based on selected package
+    const getTotalBottles = (pkgIndex) => {
+        if (pkgIndex === -1) return null;
+        let total = 0;
+        product.packages[pkgIndex].bottlesPerFlavor.forEach((bottle) => {
+                total += bottle.quantity;
+            });
+        return `${total} Bottles/Box `;
+    };
+
+    const getProductSize = (pkgIndex) => {
+        if (pkgIndex === -1) return null;
+        const size = product.packages[pkgIndex].packageSize
+        return `(${size} Grams)`;
+    };
+
     
     const handleAddToCart = async () => {
-        if (!token) {
-            // Handle case where JWT token is not present
-            console.error('JWT token not found in localStorage');
-            return;
-        }
         const productId = window.location.pathname.split('/').pop();
         const packageData = product.packages.find((pkg) => pkg.packageOption === selectedPackage)
         if (!selectedPackage) {
@@ -107,14 +116,7 @@ const Product = () => {
         }
     };
 
-    const getTotalBottles = (pkgIndex) => {
-        if (pkgIndex === -1) return null;
-        let total = 0;
-        product.packages[pkgIndex].bottlesPerFlavor.forEach((bottle) => {
-                total += bottle.quantity;
-            });
-        return total;
-    };
+
 
     return (
         <div className="product-container">
@@ -125,7 +127,10 @@ const Product = () => {
                     </div>
                     <div className="product-details">
                         <h1>{product.name}</h1>
-                        <p className="p-amount">{getTotalBottles(product.packages.findIndex((pkg) => pkg.packageOption === selectedPackage))} Bottles/Box</p>
+                        <p className="p-amount">
+                            {getTotalBottles(product.packages.findIndex((pkg) => pkg.packageOption === selectedPackage))}
+                            {getProductSize(product.packages.findIndex((pkg) => pkg.packageOption === selectedPackage))}
+                        </p>
                         <p className="p-price">
                             {selectedPackage ? getPrice(product.packages.find((pkg) => pkg.packageOption === selectedPackage).price) : 'Select a package'}
                         </p>

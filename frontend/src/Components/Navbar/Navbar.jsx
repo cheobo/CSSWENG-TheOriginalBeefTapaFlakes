@@ -10,10 +10,12 @@ import { CARTS_URL } from '../../API/constants';
 import axiosInstance from '../../API/axiosInstance.js';
 
 const Navbar = () => {
-    const token = decodeToken(localStorage.getItem('jwt'));
+    const token = localStorage.getItem('jwt');
+    const decodedToken = token ? decodeToken(token) : null;
+    const isAdmin = decodedToken && decodedToken.isAdmin;
+
     const [cart, setCart] = useState();
     const [cartItemCount, setCartItemCount] = useState(0);
-    
     const [loading, setLoading] = useState(true);
     const [openDropdown, setOpenDropdown] = useState(null);
 
@@ -23,40 +25,37 @@ const Navbar = () => {
 
     useEffect(() => {
         const fetchCartItems = async () => {
-          const token = localStorage.getItem('jwt');
-          if (!token) {
-            console.error('JWT token not found in localStorage');
-            return;
-          }
-          try {
-            const response = await axiosInstance.get(`${CARTS_URL}/`, {
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-              },
-            });
-    
-            if (response.status !== 200) {
-              throw new Error('Failed to fetch cart items');
+            try {
+                const response = await axiosInstance.get(`${CARTS_URL}/`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                if (response.status === 200) {
+                    setCart(response.data);
+                    setLoading(false);
+                } else {
+                    throw new Error('Failed to fetch cart items');
+                }
+            } catch (error) {
+                console.error('Error fetching cart items:', error);
+                setLoading(false);
             }
-    
-            setCart(response.data);
-            setLoading(false);
-          } catch (error) {
-            console.error('Error fetching cart items:', error);
-            setLoading(false);
-          }
         };
-    
-        fetchCartItems();
-      }, []);
+
+        if (token) {
+            fetchCartItems();
+        }
+    }, [token]);
 
     useEffect(() => {
         const fetchCartItemCount = async () => {
             try {
                 const response = await axiosInstance.get(`${CARTS_URL}`, {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('jwt')}`
+                        Authorization: `Bearer ${token}`
                     }
                 });
                 
@@ -71,8 +70,11 @@ const Navbar = () => {
             }
         };
 
-        fetchCartItemCount();
-    }, [cart]);
+        if (token) {
+            fetchCartItemCount();
+        }
+    }, [cart, token]);
+
 
     return (
         <div className='navbar'>
@@ -104,7 +106,7 @@ const Navbar = () => {
                         </DropdownMenu>
                     </DropdownButton>
 
-                    {token && token.isAdmin && <li className="nav-item" onClick={() => redirectTo('/admin-dashboard')}>Admin Dashboard</li>}
+                    {decodedToken && decodedToken.isAdmin && <li className="nav-item" onClick={() => redirectTo('/admin-dashboard')}>Admin Dashboard</li>}
                 </ul>
 
                 <div className="nav-login-cart">

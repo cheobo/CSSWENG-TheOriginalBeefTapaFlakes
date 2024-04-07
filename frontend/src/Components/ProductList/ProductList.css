@@ -59,3 +59,7 @@
 .product-title h3:hover {
   text-decoration: underline; /* Add underline on hover */
 }
+
+.product-price {
+  color: #E44D26;
+}

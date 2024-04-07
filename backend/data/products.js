@@ -65,6 +65,47 @@ const products = [
         ingredients: "Beef, Salt, Pepper, Soy Sauce, Vinegar, Mixed Spices, and Vegetable Oil",
         nutriInfo: "Placeholder"
       },
+      {
+        name: "The Original Beef Tapa Flakes (330 Grams)",
+        description: "You can never go wrong with the most talked about tapa in town! Stop wondering and have a taste of our savory tapa in a jar! No need to cook and ready to eat! It comes with three bursting flavors of Classic, Spicy and Sisig.",
+        reviews: [],
+        avgRating: 0,
+        countReviews: 0,
+        packages: [
+          {
+            packageOption: "Classic",
+            packageSize: 330,
+            bottlesPerFlavor:
+              { 
+                flavor: "Classic", "quantity": 1 
+              },
+            price: 215.0,
+            countInStock: 10,
+          },
+          {
+            packageOption: "Spicy",
+            packageSize: 330,
+            bottlesPerFlavor:
+              { 
+                flavor: "Classic", "quantity": 1
+              },
+            price: 215.0,
+            countInStock: 10,
+          },
+          {
+            packageOption: "Sisig",
+            packageSize: 330,
+            bottlesPerFlavor:
+              { 
+                flavor: "Classic", "quantity": 1
+              },
+            price: 215.0,
+            countInStock: 10,
+          }
+        ],
+        ingredients: "Beef, Salt, Pepper, Soy Sauce, Vinegar, Mixed Spices, and Vegetable Oil",
+        nutriInfo: "Placeholder"
+      },
   ];
   
   export default products;
