@@ -3,7 +3,6 @@ import { decodeToken } from 'react-jwt';
 import './Navbar.css';
 import logoMain from '../../Assets/logo_main.png';
 import cartIcon from '../../Assets/cart_icon.png';
-import searchIcon from '../../Assets/search.png';
 import userIcon from '../../Assets/user.png';
 import userAdmin from '../../Assets/userAdmin.png';
 import menuIcon from '../../Assets/menu.png';
@@ -103,12 +102,8 @@ const Navbar = () => {
                 <ul className="nav-menu">
                     <li className="nav-item" onClick={() => redirectTo('/')}>Home</li>
 
-                    <DropdownButton id="products" title="Products" openDropdown={openDropdown} onToggle={handleDropdownToggle}>
-                        <DropdownMenu>
-                            <button onClick={() => redirectTo('/products')}>Product List</button>
-                            <button onClick={() => redirectTo('/search')}>Search Product</button>
-                        </DropdownMenu>
-                    </DropdownButton>
+                    <li className="nav-item" onClick={() => redirectTo('/products')}>Products</li>
+
                     <DropdownButton id="partners" title="Partners" openDropdown={openDropdown} onToggle={handleDropdownToggle}>
                         <DropdownMenu>
                             <button onClick={() => redirectTo('/partners')}>Resellers</button>
@@ -137,7 +132,6 @@ const Navbar = () => {
                 <div className="nav-login-cart">
                     <img src={cartIcon} alt="Cart" className='cart-img' onClick={() => redirectTo('/cart')} />
                     <div className="nav-cart-count">{cartItemCount}</div>
-                    <img src={searchIcon} alt="Search" className='search-img' />
                     <DropdownButton
                         id="user"
                         title={
