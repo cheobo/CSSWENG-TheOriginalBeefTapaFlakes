@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import Cart from './cartModel.js'; 
 
 const userSchema = mongoose.Schema(
   {
@@ -46,6 +47,25 @@ userSchema.pre("save", async function (next) {
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+});
+
+userSchema.pre("save", async function (next) {
+  if (this.cart) {
+    return next();
+  }
+  
+  try {
+    // Create a new cart
+    const cart = await Cart.create({
+      user: this._id,
+      cartItems: [],
+      totalPrice: 0,
+    });
+    this.cart = cart._id;
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 const User = mongoose.model("User", userSchema);

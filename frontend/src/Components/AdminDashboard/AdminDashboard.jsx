@@ -59,6 +59,7 @@
             } else {
                 onSave(product.productId, product.packageId, editedProduct);
             }
+            handleImageUpload()
             onClose();
         };
 
@@ -67,26 +68,28 @@
             setImageFile(file);
         }
 
-        const handleImageUpload = async (e) => {
-            try {
-                const formData = new FormData();
-                formData.append('file', imageFile);
-                const response = await fetch(`http://localhost:5000/api/upload/${product.productId}`, {
-                    method: 'PUT',
-                    body: formData,
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to upload image');
+        const handleImageUpload = async () => {
+            if (imageFile) {
+                try {
+                    const formData = new FormData();
+                    formData.append('file', imageFile);
+                    const response = await fetch(`http://localhost:5000/api/upload/${product.productId}`, {
+                        method: 'PUT',
+                        body: formData,
+                    });
+    
+                    if (!response.ok) {
+                        throw new Error('Failed to upload image');
+                    }
+    
+                    const imageUrl = await response.json();
+                    setEditedProduct(prevState => ({
+                        ...prevState,
+                        productImage: imageUrl,
+                    }));
+                } catch (error) {
+                    console.error('Error uploading image:', error);
                 }
-
-                const imageUrl = await response.json();
-                setEditedProduct(prevState => ({
-                    ...prevState,
-                    productImage: imageUrl,
-                }));
-            } catch (error) {
-                console.error('Error uploading image:', error);
             }
         }
 
@@ -118,7 +121,6 @@
                                             accept="image/"
                                             onChange={handleImageChange}
                                             />
-                                            <button onClick={(e) => handleImageUpload(e)}>Upload</button>
                                         </div>
                                         
                                     ) : (
@@ -136,8 +138,10 @@
                             ))}
                         </tbody>
                     </table>
-                    <button className="modal-save-inventory-btn" onClick={handleSubmit}>SAVE</button>
-                    <button className="modal-cancel-inventory-btn" onClick={onClose}>CANCEL</button>
+                    <div className='modal-buttons'>
+                        <button className="modal-save-inventory-btn" onClick={handleSubmit}>SAVE</button>
+                        <button className="modal-cancel-inventory-btn" onClick={onClose}>CANCEL</button>
+                    </div>
                 </div>
             </div>
         );
@@ -241,8 +245,10 @@
                             ))}
                         </tbody>
                     </table>
-                    <button className="modal-save-inventory-btn" onClick={handleSubmit}>SAVE</button>
-                    <button className="modal-cancel-inventory-btn" onClick={onClose}>CANCEL</button>
+                    <div className='modal-buttons'>
+                        <button className="modal-save-inventory-btn" onClick={handleSubmit}>SAVE</button>
+                        <button className="modal-cancel-inventory-btn" onClick={onClose}>CANCEL</button>
+                    </div>
                 </div>
             </div>
         );

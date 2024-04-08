@@ -35,9 +35,13 @@
     background-color: #f7f7f7;
 }
 
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+}
+
 .modal-save-inventory-btn {
     margin-right: 2px;
-    margin-left: 124px;
 }
 
 .modal-cancel-inventory-btn,

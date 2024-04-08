@@ -19,9 +19,14 @@ import CheckoutandStatus from './Components/Views/CheckoutandStatus/CS.jsx';
 function App() {
     const [token, setToken] = useState(localStorage.getItem('jwt'));
     const decodedToken = token ? decodeToken(token) : null;
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Initialize isLoggedIn state
 
     const isTokenExpired = (token) => {
-        if (!token) return true;
+        if (!token) {
+            setIsLoggedIn(false); // Set isLoggedIn to false if there's no token
+            return false;
+        }
+        setIsLoggedIn(true); // Set isLoggedIn to true if there's a token
         const expirationTime = decodedToken.exp * 1000;
         return Date.now() >= expirationTime;
     };
@@ -29,7 +34,8 @@ function App() {
     // Function to handle logout
     const logout = () => {
         localStorage.removeItem('jwt'); // Clear token from storage
-		alert('Your session has expired. You have been logged out.');
+        setIsLoggedIn(false); // Set isLoggedIn to false when logging out
+        alert('Your session has expired. You have been logged out.');
         window.location.href = '/login';
     };
 
@@ -41,7 +47,7 @@ function App() {
 
         window.addEventListener('storage', handleTokenChange);
 
-        if (token && isTokenExpired(token)) {
+        if (token && isLoggedIn) {
             logout(); // Token is expired, log out user
         } else if (token && decodedToken) {
             const expirationTime = decodedToken.exp * 1000;
@@ -77,7 +83,7 @@ function App() {
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/productlist" element={<ProductList />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
+                    <Route path="/register" element={<Register/>} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path='/COS' element={<CheckoutandStatus />} />
                 </Routes>

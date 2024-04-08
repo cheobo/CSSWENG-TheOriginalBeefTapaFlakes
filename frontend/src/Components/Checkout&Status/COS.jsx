@@ -98,8 +98,10 @@ const COS = () => {
         <p>Alternative GCash - 0917 426 4330 (Raul Zamora Jr.)</p>
         <p>UnionBank Savings - 1093 4042 0640 (Kristine Gail Sandoval)</p>
       </div>
+
+      
       <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>Payment</Modal.Title>
         </Modal.Header>
         <Modal.Body>

@@ -4,7 +4,6 @@ import {
     removeFromCart, 
     updateCartItem,
     getCart,
-    clearCart
 } from "../controllers/cartController.js";
 
 import { protect } from "../middlewares/authenticationMiddleware.js";

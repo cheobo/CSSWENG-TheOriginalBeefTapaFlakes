@@ -28,23 +28,19 @@ const Register = () => {
                 body: JSON.stringify({ email, username, password })
             });
 
-            if (response.status === 201) {
-                const authentication = await fetch('http://localhost:5000/api/users/authenticate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-
-                if (!(authentication.status === 400)) {
-                    localStorage.setItem('jwt', authentication.token);
-                    redirectTo('/');
-                } else {
-                    alert('Invalid details');
-                }
-            }
-
-            if (response.status === 400)
+            if (response.status === 400) {
                 alert('Email or username is already registered');
+            } else if (response.status === 201) {
+                // Reset input fields
+                setEmail('');
+                setUsername('');
+                setPassword('');
+                setConfirmPassword('');
+                // Redirect to login page after a delay
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 2000); // 2000 milliseconds delay (2 seconds)
+            }
         } catch (error) {
             console.error('Login error:', error);
         }
@@ -78,10 +74,6 @@ const Register = () => {
             </div>
         </div>
     );
-};
-
-const redirectTo = (route) => {
-    window.location.href = route;
 };
 
 export default Register;

@@ -25,7 +25,7 @@ const addToCart = asyncHandler(async (req, res) => {
         res.status(201).json({ message: 'Item added to cart successfully', cartItemsAdded});
     } catch (error) {
         // If an error occurs, send an error response
-        res.status(401).json(error);
+        res.status(500).json(error);
     }
 
     
@@ -169,5 +169,4 @@ export {
         removeFromCart, 
         updateCartItem,
         getCart,
-        clearCart
 };

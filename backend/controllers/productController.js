@@ -25,19 +25,22 @@ const updateProduct = asyncHandler(async (req, res) => {
     try {
         const product = await Product.findById(productId);
         
-        const existingPackage = await product.packages.findIndex(productPackage => productPackage.packageOption === data.packageOption);
-        console.log(existingPackage)
+        const existingPackageIndex = await product.packages.findIndex(productPackage => productPackage.packageOption === data.packageOption);
         if (product){
-            if (existingPackage != -1) {
-                product.packages[existingPackage]._id = packageId; 
-                product.packages.splice(existingPackageIndex, 1);
+            if (existingPackageIndex != -1) {
+                console.log(product.packages[existingPackageIndex]._id)
+                console.log(packageId)
+                if (product.packages[existingPackageIndex]._id !== packageId) {
+                    product.packages[existingPackageIndex]._id = packageId; 
+                    product.packages.splice(existingPackageIndex, 0);
+                }
                 product.name = data.productName;
                 product.description = data.description;
-                product.packages[existingPackage].packageOption = data.packageOption;
-                product.packages[existingPackage].packageSize = data.packageSize;
-                product.packages[existingPackage].bottlesPerFlavor = data.bottlesPerFlavor;
-                product.packages[existingPackage].price = data.price;
-                product.packages[existingPackage].countInStock = data.inventory;
+                product.packages[existingPackageIndex].packageOption = data.packageOption;
+                product.packages[existingPackageIndex].packageSize = data.packageSize;
+                product.packages[existingPackageIndex].bottlesPerFlavor = data.bottlesPerFlavor;
+                product.packages[existingPackageIndex].price = data.price;
+                product.packages[existingPackageIndex].countInStock = data.inventory;
                 product.ingredients = data.ingredients;
                 product.nutriInfo= data.nutritionalInfo;
                 
