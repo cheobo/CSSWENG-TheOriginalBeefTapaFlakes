@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './AdminDashboard.css';
+import './OrderManagement.css';
 import deleteIcon from '../../Assets/delete.png';
 
 function EditModal({ isOpen, onClose, product, onSave }) {
@@ -254,7 +254,7 @@ function AddModal({ isOpen, onClose, onSave }) {
     );
 }
 
-const AdminDashboard = () => {
+const OrderManagement = () => {
     const [products, setProducts] = useState([]);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -388,7 +388,7 @@ const AdminDashboard = () => {
     return (
         <div className="admin-grid-container">
             <div className="admin-elements-container">
-                <h1 className="dashboard-title">Product Management</h1>
+                <h1 className="dashboard-title">Order Management</h1>
                 <div className="admin-grid-product">
                     <div className="admin-cart-container">
                         <div className="admin-flex-container">
@@ -467,4 +467,4 @@ const AdminDashboard = () => {
     );
 };
 
-export default AdminDashboard;
+export default OrderManagement;

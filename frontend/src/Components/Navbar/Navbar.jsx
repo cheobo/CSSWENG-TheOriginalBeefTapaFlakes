@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { decodeToken } from 'react-jwt';
 import './Navbar.css';
 import logoMain from '../../Assets/logo_main.png';
 import cartIcon from '../../Assets/cart_icon.png';
 import searchIcon from '../../Assets/search.png';
 import userIcon from '../../Assets/user.png';
+import userAdmin from '../../Assets/userAdmin.png';
 import menuIcon from '../../Assets/menu.png';
 import { CARTS_URL } from '../../API/constants';
 import axiosInstance from '../../API/axiosInstance.js';
@@ -18,10 +19,27 @@ const Navbar = () => {
     const [cartItemCount, setCartItemCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [openDropdown, setOpenDropdown] = useState(null);
+    const navbarRef = useRef(null);
 
     const handleDropdownToggle = (dropdownId) => {
         setOpenDropdown(openDropdown === dropdownId ? null : dropdownId);
     };
+
+    // Effect to close dropdown menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+                setOpenDropdown(null); // Close all dropdowns
+            }
+        };
+
+        // Attach the event listener to the document
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            // Clean up the event listener
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     useEffect(() => {
         const fetchCartItems = async () => {
@@ -77,7 +95,7 @@ const Navbar = () => {
 
 
     return (
-        <div className='navbar'>
+        <div className='navbar' ref={navbarRef}>
             <div className="nav-logo">
                 <img src={logoMain} alt="" className='logo-img' />
             </div>
@@ -106,21 +124,43 @@ const Navbar = () => {
                         </DropdownMenu>
                     </DropdownButton>
 
-                    {decodedToken && decodedToken.isAdmin && <li className="nav-item" onClick={() => redirectTo('/admin-dashboard')}>Admin Dashboard</li>}
+                    {isAdmin &&
+                        <DropdownButton id="navbar-admin" title="Admin Dashboard" openDropdown={openDropdown} onToggle={handleDropdownToggle}>
+                            <DropdownMenu>
+                                <button onClick={() => redirectTo('/product-management')}>Product Management</button>
+                                <button onClick={() => redirectTo('/order-management')}>Order Management</button>
+                            </DropdownMenu>
+                        </DropdownButton>
+                    }
                 </ul>
 
                 <div className="nav-login-cart">
                     <img src={cartIcon} alt="Cart" className='cart-img' onClick={() => redirectTo('/cart')} />
                     <div className="nav-cart-count">{cartItemCount}</div>
                     <img src={searchIcon} alt="Search" className='search-img' />
-                    <DropdownButton id="user" title={<img src={userIcon} alt="User" className='user-img'/>} openDropdown={openDropdown} onToggle={handleDropdownToggle}>
+                    <DropdownButton
+                        id="user"
+                        title={
+                            <img src={isAdmin ? userAdmin : userIcon} alt="User" className='user-img'/>
+                        }
+                        openDropdown={openDropdown}
+                        onToggle={handleDropdownToggle}
+                    >
                         <DropdownMenuIcon>
-                            {token ? <button onClick={handleLogout}>Logout</button> : (
-                                <>
-                                    <button onClick={() => redirectTo('/login')}>Login</button>
-                                    <button onClick={() => redirectTo('/register')}>Register</button>
-                                </>
-                            )}
+                        {token ? (
+                            <>
+                                <div className="username-display">
+                                    Logged in as <span style={{ color: '#FF0000' }}>{`${decodedToken.username}`}</span>
+                                </div>
+                                {isAdmin && <button onClick={() => redirectTo('/createadmin')}>Create New Admin</button>}
+                                <button onClick={handleLogout}>Logout</button>
+                            </>
+                        ) : (
+                            <>
+                                <button onClick={() => redirectTo('/login')}>Login</button>
+                                <button onClick={() => redirectTo('/register')}>Register</button>
+                            </>
+                        )}
                         </DropdownMenuIcon>
                     </DropdownButton>
                     <img src={menuIcon} alt="Menu" className='menu-img' onClick={() => redirectTo('/COS')} />

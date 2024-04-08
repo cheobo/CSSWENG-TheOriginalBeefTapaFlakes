@@ -160,6 +160,7 @@ const Product = () => {
                                     ))
                                 )}
                         </ul>
+                        {showWarning && <div className="p-error-bubble">{warningMessage}</div>}
                         <h3>
                             Product Description:
                         </h3>
@@ -177,7 +178,6 @@ const Product = () => {
                                 onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
                             />
                         </div>
-                        {showWarning && <div className="p-error-bubble">{warningMessage}</div>}
                         <ul>
                             <li>Ingredients: {product.ingredients}</li>
                             <li>Nutritional Info: {product.nutriInfo}</li>

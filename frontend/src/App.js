@@ -10,9 +10,11 @@ import About from './Components/Views/About/About.jsx';
 import ProductPage from './Components/Views/Products/ProductPage_Views.jsx';
 import Login from './Components/Views/Login/Login_Views.jsx';
 import Register from './Components/Views/Register/Register_Views.jsx';
+import CreateAdmin from './Components/Views/CreateAdmin/CreateAdmin_Views.jsx';
 import ForgotPassword from './Components/Views/ForgotPassword_Views/ForgotPassword_Views.jsx';
 import Cart from './Components/Views/Cart/Cart.jsx';
 import AdminDashboard from './Components/Views/Admin/Admin.jsx';
+import OrderManagement from './Components/Views/OrderManagement/OrderManagement_Views.jsx';
 import { decodeToken } from 'react-jwt';
 import CheckoutandStatus from './Components/Views/CheckoutandStatus/CS.jsx';
 
@@ -79,11 +81,13 @@ function App() {
                     <Route path="/about/faq" element={<About category="faq" />} />
                     <Route path="/about/terms" element={<About category="terms" />} />
                     <Route path="/about/refund" element={<About category="refund" />} />
-                    <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                    <Route path="/product-management" element={<AdminDashboard />} />
+                    <Route path="/order-management" element={<OrderManagement />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/productlist" element={<ProductList />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register/>} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/createadmin" element={<CreateAdmin />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path='/COS' element={<CheckoutandStatus />} />
                 </Routes>

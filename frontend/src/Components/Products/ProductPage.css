@@ -119,11 +119,11 @@
 .p-error-bubble::after {
     content: '';
     position: absolute;
-    top: 100%;
+    top: -20px;
     left: 20px;
     border-width: 10px;
     border-style: solid;
-    border-color: #FFD2D2 transparent transparent transparent;
+    border-color: transparent transparent #FFD2D2 transparent;
 }
 
 .p-package-button {
