@@ -141,9 +141,16 @@
 }
 
 .p-success-message {
-    text-align: center;
-    color: green;
+    position: relative;
+    padding: 10px;
+    background: #D2FFD2; /* Light green background */
+    border-radius: 4px;
+    border: 1px solid #039b03; /* Green border */
+    color: #039b03; /* Green text color */
+    font-size: 14px;
+    margin-bottom: 20px;
 }
+
 
 /* Responsive layout for smaller screens */
 @media (max-width: 768px) {

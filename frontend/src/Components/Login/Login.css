@@ -108,3 +108,7 @@ input[type="password"] {
         width: 100%;
     }
 }
+
+.login-page .p-error-bubble::after {
+    content: none;
+}

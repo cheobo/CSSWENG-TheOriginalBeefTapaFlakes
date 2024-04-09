@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../API/axiosInstance.js'; 
+import { USERS_URL } from '../../API/constants.js';
 import './CreateAdmin.css';
 
 const CreateAdmin = () => {
@@ -6,7 +9,19 @@ const CreateAdmin = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [emailError, setEmailError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [errorOption, setErrorOption] = useState('');
+    const [token, setToken] = useState(localStorage.getItem('jwt'));
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // Check if there is a valid token in the local storage
+        if (!token) {
+            // Redirect to the login page if there is no token
+            navigate('/login');
+        }
+    }, [token, navigate])
 
     const validateEmail = (email) => {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -17,60 +32,84 @@ const CreateAdmin = () => {
         event.preventDefault();
 
         if (!validateEmail(email)) {
-            setEmailError('Please enter a valid email address');
+            setErrorMessage('Please enter a valid email address');
+            setErrorOption('email');
             return;
         }
 
         try {
-            const response = await fetch('http://localhost:5000/api/users/createadmin', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, username, password })
+            const formData = {
+                email: email,
+                username: username,
+                password: password,
+                confirmPassword: confirmPassword
+            }
+            const response = await axiosInstance.post(`${USERS_URL}/createadmin`, formData, { 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
             });
 
-            if (response.status === 400) {
-                alert('Email or username is already registered');
-            } else if (response.status === 201) {
-                // Logout the current session by clearing the local storage
-                localStorage.removeItem('jwt'); // Assuming 'jwt' is your token's key
-
-                // Optionally, show a success message or alert before redirecting
-                alert('Admin account created successfully. You will be redirected to the login page.');
-                
-                // Redirect to login page after a delay
+            if (response.status === 201) {
+                setErrorOption('');
+                setErrorMessage('')
+                setSuccessMessage(response.data.message);
+                // Reset input fields
+                setEmail('');
+                setUsername('');
+                setPassword('');
+                setConfirmPassword('');
                 setTimeout(() => {
-                    window.location.href = '/login';
-                }, 2000); // 2000 milliseconds delay (2 seconds)
+                    setSuccessMessage('');
+                }, 3000); 
             }
         } catch (error) {
-            console.error('Error creating admin:', error);
+            if (error.response && error.response.status === 400) {
+                if (error.response.data.errorOption === 'email') {
+                    setErrorOption(error.response.data.errorOption);
+                } else if (error.response.data.errorOption === 'username') {
+                    setErrorOption(error.response.data.errorOption);
+                } else if (error.response.data.errorOption === 'password') {
+                    setErrorOption(error.response.data.errorOption);
+                }
+
+                setErrorMessage(error.response.data.message);
+            } else {
+                console.error('Register error:', error);
+            }
         }
     };
 
     return (
-        <div className="admin-register-container">
-            <div className="admin-form-container">
+        <div className="register-container">
+            <div className="form-container">
                 <h2>CREATE YOUR ADMIN ACCOUNT</h2>
                 <form onSubmit={handleSubmit}>
-                    <div className="admin-register-input-group">
+                    <div className="register-input-group">
                         <label htmlFor="email">Email Address *</label>
-                        <input type="email" className="admin-register-input-field" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                        <input type="email" className="register-input-field" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                        {errorMessage && errorOption === 'email' && <div className="p-error-bubble">{errorMessage}</div>}
                     </div>
-                    {emailError && <p className="admin-error-message">{emailError}</p>}
-                    <div className="admin-register-input-group">
+                    <div className="register-input-group">
                         <label htmlFor="username">Username *</label>
-                        <input type="username" className="admin-register-input-field" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                        <input type="username" className="register-input-field" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                        {errorMessage && errorOption === 'username' && <div className="p-error-bubble">{errorMessage}</div>}
                     </div>
-                    <div className="admin-register-input-group">
+                    <div className="register-input-group">
                         <label htmlFor="password">Password *</label>
-                        <input type="password" className="admin-register-input-field" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                        <input type="password" className="register-input-field" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                        {errorMessage && errorOption === 'password' && <div className="p-error-bubble">{errorMessage}</div>}
                     </div>
-                    <div className="admin-register-input-group">
+                    <div className="register-input-group">
                         <label htmlFor="confirmPassword">Confirm Password *</label>
-                        <input type="password" className="admin-register-input-field" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                        <input type="password" className="register-input-field" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                        {errorMessage && errorOption === 'password' && <div className="p-error-bubble">{errorMessage}</div>}
                     </div>
-                    <button type="submit" className="admin-register-button">CREATE ADMIN ACCOUNT</button>
-                    <a href="/login" className="admin-login">Already have an account?</a>
+                    <div>
+                        {successMessage && <div className="p-success-message">{successMessage}</div>}
+                    </div>
+                    <button type="submit" className="register-button">CREATE ADMIN ACCOUNT</button>
                 </form>
             </div>
         </div>
