@@ -204,7 +204,7 @@ const CartItems = () => {
                     <div key={index} className="item">
                       <img src={`https://tobtf.onrender.com/${imageUrl}`} alt={item.name} />
                       <div className="item-details">
-                        <p> {item.name}</p>
+                        <p> {item.name} [{item.selectedPackage}]</p>
                         <div className="price-quantity-container">
                           <div className="price-container">
                             <p> {parseFloat(item.price.$numberDecimal).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })}</p>
