@@ -160,7 +160,7 @@ const CartItems = () => {
     const currentDate = new Date();
 
     try {
-      const response = await fetch("http://localhost:5000/api/orders/addOrder", {
+      const response = await fetch("https://tobtf.onrender.com//api/orders/addOrder", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -202,7 +202,7 @@ const CartItems = () => {
                   const imageUrl = product ? product.image : " "; // Default image if product not found
                   return (
                     <div key={index} className="item">
-                      <img src={`http://localhost:5000/${imageUrl}`} alt={item.name} />
+                      <img src={`https://tobtf.onrender.com//${imageUrl}`} alt={item.name} />
                       <div className="item-details">
                         <p> {item.name}</p>
                         <div className="price-quantity-container">
