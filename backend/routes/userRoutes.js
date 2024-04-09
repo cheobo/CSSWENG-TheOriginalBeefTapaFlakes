@@ -3,7 +3,8 @@ import {
     authenticateUser,
     logoutUser,
     registerUser,
-    registerAdmin
+    registerAdmin,
+    getUsersById
 } from "../controllers/userController.js";
 import { protect } from "../middlewares/authenticationMiddleware.js";
 
@@ -13,5 +14,6 @@ router.post("/authenticate", authenticateUser);
 router.post("/logout", logoutUser)
 router.post("/register", registerUser);
 router.post("/createadmin", protect, registerAdmin);
+router.get("/:userId", getUsersById);
 
 export default router;

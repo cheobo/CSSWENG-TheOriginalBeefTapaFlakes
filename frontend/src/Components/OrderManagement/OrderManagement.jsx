@@ -32,9 +32,6 @@ const OrderManagement = () => {
 
     useEffect(() => {
         const fetchOrders = async () => {
-            const token = localStorage.getItem('jwt');
-            const decoded = decodeToken(token);
-            const userId = decoded?._id; // Ensure this matches your token structure
             try {
                 const response = await fetch(`https://tobtf.onrender.com/api/orders/fetchOrders`, {
                     headers: {
@@ -51,6 +48,17 @@ const OrderManagement = () => {
         fetchOrders();
     }, []);
 
+    const fetchUser = async (userId) => {
+        try {
+            const response = await fetch(`https://tobtf.onrender.com/api/users/${userId}`);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Failed to fetch orders:', error);
+        }
+    };
+
+
     const StatusMessage = ({ message, type }) => (
         <div className={`status-message ${type}`}>{message}</div>
     );
@@ -64,9 +72,10 @@ const OrderManagement = () => {
             const decoded = decodeToken(token);
     
             // Check if the userId in the order matches the userId in the token
-            if (orderDetails.userId === decoded._id) {
+            if (orderDetails.userId) {
                 // Add the username from the decoded token to the order details
-                const orderDetailsWithUsername = { ...orderDetails, username: decoded.username };
+                const username = fetchUser(orderDetails.userId)
+                const orderDetailsWithUsername = { ...orderDetails, username: username };
                 setSelectedOrderDetails(orderDetailsWithUsername);
                 setShowDetailsModal(true);
             }

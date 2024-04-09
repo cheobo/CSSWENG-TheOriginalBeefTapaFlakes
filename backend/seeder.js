@@ -4,6 +4,7 @@ import users from "./data/users.js";
 import Product from "./models/productModel.js";
 import User from "./models/userModel.js";
 import Cart from "./models/cartModel.js";
+import Order from "./models/orderModel.js";
 import connectDB from "./config/db.js";
 import colors from "colors";
 
@@ -15,6 +16,7 @@ const importData = async () => {
     await Product.deleteMany();
     await User.deleteMany();
     await Cart.deleteMany();
+    await Order.deleteMany();
 
     // Insert sample products
     const sampleProducts = products.map((product) => ({ ...product }));
