@@ -18,7 +18,7 @@
     padding: 20px;
     border: 1px solid #000;
     max-width: 600px;
-    transform: translateY(1%);
+    transform: translateY(15%);
 }
 
 .modal-table {
@@ -226,7 +226,7 @@
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: 725px;
+    max-height: 874px;
 }
 
 .admin-product-container {
