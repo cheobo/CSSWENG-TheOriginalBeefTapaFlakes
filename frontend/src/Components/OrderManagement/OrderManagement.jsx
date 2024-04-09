@@ -104,8 +104,13 @@ const OrderManagement = () => {
             setTimeout(() => setSuccessMessage(''), 3000);
     
             // Update the status locally for immediate UI feedback
+            const today = new Date().toISOString(); // Get current date and time in ISO format
+
             const updatedOrders = orders.map((order) => {
                 if (order._id === orderId) {
+                    if (order.status === "Delivered") {
+                        return { ...order, status: newStatus, dateCompleted: today };
+                    }
                     return { ...order, status: newStatus };
                 }
                 return order;
