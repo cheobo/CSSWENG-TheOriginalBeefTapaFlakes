@@ -77,7 +77,7 @@ function EditModal({ isOpen, onClose, product, onSave }) {
             try {
                 const formData = new FormData();
                 formData.append('file', imageFile);
-                const response = await fetch(`https://tobtf.onrender.com//api/upload/${product.productId}`, {
+                const response = await fetch(`https://tobtf.onrender.com/api/upload/${product.productId}`, {
                     method: 'PUT',
                     body: formData,
                 });
@@ -486,7 +486,7 @@ const AdminDashboard = () => {
                             <div className="admin-product-container">
                                 {filteredProducts.map((product) => (
                                     <div key={product.packageId} className="item">
-                                        <img src={`https://tobtf.onrender.com//${product.image}`} alt={product.productName} />
+                                        <img src={`https://tobtf.onrender.com/${product.image}`} alt={product.productName} />
                                         <div className="admin-product-details">
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <p>{product.productName} [{product.packageOption}]</p>

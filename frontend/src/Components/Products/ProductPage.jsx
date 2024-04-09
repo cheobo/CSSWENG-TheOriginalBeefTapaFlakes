@@ -128,7 +128,7 @@ const Product = () => {
             {product && (
                 <div className="p-details-container">
                     <div className="p-image-gallery">
-                        <img src={`https://tobtf.onrender.com//${product.image}`} alt={product.name} />
+                        <img src={`https://tobtf.onrender.com/${product.image}`} alt={product.name} />
                     </div>
                     <div className="product-details">
                         <h1>{product.name}</h1>
