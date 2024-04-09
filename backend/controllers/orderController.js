@@ -23,7 +23,13 @@ const addOrder = asyncHandler(async(req, res) => {
 });
 
 const fetchOrders = asyncHandler(async(req, res) => {
-    const orders = await Order.find({ userId: req.params.userId });
+    const orders = await Order.find({});
+
+    res.status(200).json(orders);
+});
+
+const fetchUserOrders = asyncHandler(async(req, res) => {
+    const orders = await Order.find({userId: req.params.userId});
 
     res.status(200).json(orders);
 });
@@ -55,5 +61,6 @@ const submitProofOfPayment = asyncHandler(async (req, res) => {
 export {
     addOrder,
     fetchOrders,
+    fetchUserOrders,
     submitProofOfPayment,
 };
