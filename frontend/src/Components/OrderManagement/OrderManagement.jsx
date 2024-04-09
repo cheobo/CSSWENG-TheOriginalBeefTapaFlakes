@@ -18,7 +18,7 @@ const OrderManagement = () => {
             const decoded = decodeToken(token);
             const userId = decoded?._id; // Ensure this matches your token structure
             try {
-                const response = await fetch(`http://localhost:5000/api/orders/fetchOrders/${userId}`, {
+                const response = await fetch(`https://tobtf.onrender.com//api/orders/fetchOrders/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`, // If your API requires authorization
                     },
@@ -59,7 +59,7 @@ const OrderManagement = () => {
         try {
             // Assuming you're using Bearer token authentication
             const token = localStorage.getItem('jwt');
-            const response = await fetch(`http://localhost:5000/api/orders/updateOrderStatus/${orderId}`, {
+            const response = await fetch(`https://tobtf.onrender.com//api/orders/updateOrderStatus/${orderId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
