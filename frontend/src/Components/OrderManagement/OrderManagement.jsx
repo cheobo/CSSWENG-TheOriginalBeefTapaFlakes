@@ -63,16 +63,21 @@ const OrderManagement = () => {
         <div className={`status-message ${type}`}>{message}</div>
     );
 
-    const openOrderDetailsModal = (orderId) => {
+    const openOrderDetailsModal = async (orderId) => {
         // Find the order details by orderId
         const orderDetails = orders.find(order => order._id === orderId);
         if (orderDetails) {
             if (orderDetails.userId) {
-                // Add the username from the decoded token to the order details
-                const user = fetchUser(orderDetails.userId)
-                const orderDetailsWithUsername = { ...orderDetails, username: user.username };
-                setSelectedOrderDetails(orderDetailsWithUsername);
-                setShowDetailsModal(true);
+                try {
+                    // Fetch user data asynchronously
+                    const user = await fetchUser(orderDetails.userId);
+                    // Add the username from the decoded token to the order details
+                    const orderDetailsWithUsername = { ...orderDetails, username: user.username };
+                    setSelectedOrderDetails(orderDetailsWithUsername);
+                    setShowDetailsModal(true);
+                } catch (error) {
+                    console.error('Failed to fetch user:', error);
+                }
             }
         }
     };
