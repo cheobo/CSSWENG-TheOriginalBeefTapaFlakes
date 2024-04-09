@@ -18,6 +18,8 @@ const addOrder = asyncHandler(async(req, res) => {
     }
 
     await Cart.deleteOne({ user: userId });
+    const newCart = new Cart({ user: userId, cartItems: [] });
+    await newCart.save();
 
     res.status(200).json({ message: "Order created" });
 });

@@ -54,7 +54,7 @@ const OrderManagement = () => {
             const data = await response.json();
             return data;
         } catch (error) {
-            console.error('Failed to fetch orders:', error);
+            console.error('Failed to fetch users:', error);
         }
     };
 
@@ -67,15 +67,10 @@ const OrderManagement = () => {
         // Find the order details by orderId
         const orderDetails = orders.find(order => order._id === orderId);
         if (orderDetails) {
-            // Decode the JWT token from localStorage to get the username
-            const token = localStorage.getItem('jwt');
-            const decoded = decodeToken(token);
-    
-            // Check if the userId in the order matches the userId in the token
             if (orderDetails.userId) {
                 // Add the username from the decoded token to the order details
-                const username = fetchUser(orderDetails.userId)
-                const orderDetailsWithUsername = { ...orderDetails, username: username };
+                const user = fetchUser(orderDetails.userId)
+                const orderDetailsWithUsername = { ...orderDetails, username: user.username };
                 setSelectedOrderDetails(orderDetailsWithUsername);
                 setShowDetailsModal(true);
             }
