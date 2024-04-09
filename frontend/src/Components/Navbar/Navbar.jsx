@@ -193,7 +193,7 @@ const DropdownMenuIcon = ({ children }) => (
 
 const handleLogout = async () => {
     try {
-        const response = await fetch('https://tobtf.onrender.com//api/users/logout', { method: 'POST' });
+        const response = await fetch('https://tobtf.onrender.com/api/users/logout', { method: 'POST' });
 
         if (response.status === 200) {
             localStorage.removeItem('jwt');
