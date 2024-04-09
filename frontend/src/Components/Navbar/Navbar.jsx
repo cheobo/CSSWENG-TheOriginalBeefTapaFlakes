@@ -65,7 +65,7 @@ const Navbar = () => {
         if (token) {
             fetchCartItems();
         }
-    }, [token]);
+    }, [cart, token]);
 
     useEffect(() => {
         const fetchCartItemCount = async () => {

@@ -1,32 +1,43 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
-import { USERS_URL } from '../../API/constants';
+import { USERS_URL } from '../../API/constants.js';
+import axiosInstance from '../../API/axiosInstance.js'
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginError, setLoginError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:5000/api/users/authenticate', {
+            const response = await axiosInstance.post(`${USERS_URL}/authenticate`, JSON.stringify({ email, password }), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
             });
 
             if (response.status === 200) {
-                const authentication = await response.json();
-                localStorage.setItem('jwt', authentication.token);
-                redirectTo('/');
+                const authentication = response.data.token;
+                localStorage.setItem('jwt', authentication);
+                setTimeout(() => {
+                    redirectTo('/')
+                }, 3000);
+                setSuccessMessage(response.data.message)
+                
             }
 
-            if (response.status === 400) {
-                setLoginError('Invalid email or password');
-            }
+            
         } catch (error) {
-            console.error('Login error:', error);
+            if (error.response && error.response.status === 401) {
+                setLoginError(error.response.data.message);
+                setTimeout(() => {
+                    setLoginError('');
+                }, 3000);
+                
+            }
         }
     };
 
@@ -46,7 +57,8 @@ const Login = () => {
                         </div>
                         <button type="submit" className="login-button">LOG IN</button>
                         <a href="/forgot-password" className="forgot-password">Forgot password?</a>
-                        {loginError && <p className="login-error-message">{loginError}</p>}
+                        {loginError && <p className="p-error-bubble">{loginError}</p>}
+                        {successMessage && <p className="p-success-message">{successMessage}</p>}
                     </form>
                 </section>
                 <section className="new-customer-section">
@@ -68,5 +80,6 @@ const Login = () => {
 const redirectTo = (route) => {
     window.location.href = route;
 };
+
 
 export default Login;

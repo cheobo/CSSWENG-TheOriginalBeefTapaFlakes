@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 import deleteIcon from '../../Assets/delete.png';
+import { PRODUCT_URL } from '../../API/constants.js';
+import axiosInstance from '../../API/axiosInstance.js'
 
 function EditModal({ isOpen, onClose, product, onSave }) {
     const [editedProduct, setEditedProduct] = useState({});
@@ -61,6 +64,7 @@ function EditModal({ isOpen, onClose, product, onSave }) {
         }
         handleImageUpload()
         onClose();
+        setImageFile(null);
     };
 
     const handleImageChange = (e) => {
@@ -77,11 +81,11 @@ function EditModal({ isOpen, onClose, product, onSave }) {
                     method: 'PUT',
                     body: formData,
                 });
-
+    
                 if (!response.ok) {
                     throw new Error('Failed to upload image');
                 }
-
+    
                 const imageUrl = await response.json();
                 setEditedProduct(prevState => ({
                     ...prevState,
@@ -92,6 +96,7 @@ function EditModal({ isOpen, onClose, product, onSave }) {
             }
         }
     }
+    
 
     if (!isOpen) return null;
 
@@ -218,7 +223,7 @@ function AddModal({ isOpen, onClose, onSave }) {
                                                 key === 'productName' ? "e.g., Sub-Reseller Package" :
                                                     key === 'description' ? "e.g., Discover convenience and profit with our..." :
                                                         key === 'packageOption' ? "e.g., Package A" :
-                                                            key === 'bottlesPerFlavor' ? "e.g.,\nClassic: 5\nSpicy: 5" :
+                                                            key === 'bottlesPerFlavor' ? "<Flavor>: <Quantity> e.g.,\nClassic: 5\nSpicy: 5" :
                                                                 key === 'ingredients' ? "e.g., Beef, Salt, Pepper..." :
                                                                     key === 'nutritionalInfo' ? "e.g., Placeholder" :
                                                                         "Placeholder"
@@ -253,12 +258,51 @@ function AddModal({ isOpen, onClose, onSave }) {
         </div>
     );
 }
+const PopupMessage = ({ message, type }) => {
+    return (
+        <div className={`popup-message ${type}`}>
+            <p>{message}</p>
+        </div>
+    );
+};
 
 const AdminDashboard = () => {
     const [products, setProducts] = useState([]);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [currentEditProduct, setCurrentEditProduct] = useState(null);
+    const [token, setToken] = useState(localStorage.getItem('jwt'));
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        // Display success message for 3 seconds then clear it
+        if (successMessage) {
+            const timeout = setTimeout(() => {
+                setSuccessMessage('');
+            }, 3000);
+            return () => clearTimeout(timeout);
+        }
+    }, [successMessage]);
+
+    useEffect(() => {
+        // Display error message for 3 seconds then clear it
+        if (errorMessage) {
+            const timeout = setTimeout(() => {
+                setErrorMessage('');
+            }, 3000);
+            return () => clearTimeout(timeout);
+        }
+    }, [errorMessage]);
+    
+    useEffect(() => {
+        // Check if there is a valid token in the local storage
+        if (!token) {
+            // Redirect to the login page if there is no token
+            navigate('/login');
+        }
+    }, [token, navigate])
 
     // Effect for disabling/enabling body scroll
     useEffect(() => {
@@ -273,21 +317,19 @@ const AdminDashboard = () => {
         if (window.confirm('Are you sure you want to delete this product?')) {
             try {
                 const token = localStorage.getItem('jwt');
-                const response = await fetch(`http://localhost:5000/api/products/remove/${productId}/${packageId}`, {
+                const response = await axiosInstance.delete(`${PRODUCT_URL}/remove/${productId}/${packageId}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
 
-                if (!response.ok) {
-                    throw new Error('Failed to delete product');
+                if (response.status === 200) {
+                    console.log(response.data)
+                    setSuccessMessage(response.data.message);
                 }
-
-                console.log('Product deleted successfully');
             } catch (error) {
-                console.error('Error deleting product:', error);
-                alert('An error occurred while deleting the product.');
+               setErrorMessage(error.response.data.message);
             }
         }
     };
@@ -295,27 +337,28 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/products');
-                if (!response.ok) throw new Error('Failed to fetch products');
-                const productsData = await response.json();
-                const flattenedProducts = productsData.flatMap(product =>
-                    product.packages.map(packageItem => ({
-                        packageId: packageItem._id,
-                        productId: product._id,
-                        productName: product.name,
-                        description: product.description,
-                        packageOption: packageItem.packageOption,
-                        packageSize: packageItem.packageSize,
-                        bottlesPerFlavor: packageItem.bottlesPerFlavor,
-                        price: packageItem.price,
-                        currentInventory: packageItem.countInStock,
-                        ingredients: product.ingredients,
-                        nutritionalInfo: product.nutriInfo,
-                        image: product.image,
-                        imageId: product.imageId
-                    }))
-                );
-                setProducts(flattenedProducts);
+                const response = await axiosInstance.get(`${PRODUCT_URL}`);
+                if (response.status === 200) {
+                    const productsData = response.data;
+                    const flattenedProducts = productsData.flatMap(product =>
+                        product.packages.map(packageItem => ({
+                            packageId: packageItem._id,
+                            productId: product._id,
+                            productName: product.name,
+                            description: product.description,
+                            packageOption: packageItem.packageOption,
+                            packageSize: packageItem.packageSize,
+                            bottlesPerFlavor: packageItem.bottlesPerFlavor,
+                            price: packageItem.price,
+                            currentInventory: packageItem.countInStock,
+                            ingredients: product.ingredients,
+                            nutritionalInfo: product.nutriInfo,
+                            image: product.image,
+                            imageId: product.imageId
+                        }))
+                    );
+                    setProducts(flattenedProducts);
+                } 
             } catch (error) {
                 console.error('Error fetching products:', error);
             }
@@ -337,57 +380,53 @@ const AdminDashboard = () => {
     };
 
     const saveEdits = async (productId, packageId, updatedProduct) => {
-        const token = localStorage.getItem('jwt');
         try {
-            const response = await fetch(`http://localhost:5000/api/products/${productId}/${packageId}`, {
-                method: 'PUT',
+            const response = await axiosInstance.put(`${PRODUCT_URL}/${productId}/${packageId}`, JSON.stringify(updatedProduct), {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify(updatedProduct),
             });
 
-            if (!response.ok) throw new Error('Failed to update the product details');
-            const editedProduct = await response.json();
-            console.log(editedProduct.message);
+            if (response.status === 200)  {
+                setSuccessMessage(response.data.message)
 
-            setIsEditModalOpen(false);
-            // Refresh the product list or update state if necessary
+                setIsEditModalOpen(false);
+            }
         } catch (error) {
-            console.error('Error updating product:', error);
+            setErrorMessage(error.response.data.message)
         }
     };
 
     const handleAddProduct = async (newProductData) => {
-        const token = localStorage.getItem('jwt');
         try {
             // Send the new product data to the server
-            const response = await fetch('http://localhost:5000/api/products/add', {
-                method: 'POST',
+            const response = await axiosInstance.post(`${PRODUCT_URL}/add`, JSON.stringify(newProductData), {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify(newProductData),
             });
 
-            if (!response.ok) throw new Error('Failed to add new product');
-            const updatedProducts = await response.json();
-            setProducts([...products, updatedProducts]);
-
-
-            console.log(updatedProducts.message)
+            if (response.status === 201) {
+                const updatedProducts = response.data.product;
+                const message = response.data.message;
+                setProducts([...products, updatedProducts]);
+                setSuccessMessage(message);
+            }
+           
             // Close the modal after saving
             setIsAddModalOpen(false);
         } catch (error) {
-            console.error('Error adding new product:', error);
+            setErrorMessage(error.response.data.message);
         }
     };
 
     return (
         <div className="admin-grid-container">
             <div className="admin-elements-container">
+            {successMessage && <PopupMessage message={successMessage} type="success" />}
+            {errorMessage && <PopupMessage message={errorMessage} type="error" />}
                 <h1 className="dashboard-title">Product Management</h1>
                 <div className="admin-grid-product">
                     <div className="admin-cart-container">
