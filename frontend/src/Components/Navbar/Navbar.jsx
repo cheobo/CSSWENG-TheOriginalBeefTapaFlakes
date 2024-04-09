@@ -107,9 +107,9 @@ const Navbar = () => {
                     <DropdownButton id="about" title="About" openDropdown={openDropdown} onToggle={handleDropdownToggle}>
                         <DropdownMenu>
                             <button onClick={() => redirectTo('/about')}>Contact Us</button>
-                            <button onClick={() => redirectTo('/faq')}>Frequently Asked</button>
-                            <button onClick={() => redirectTo('/terms')}>Terms of Service</button>
-                            <button onClick={() => redirectTo('/refund')}>Refund Policy</button>
+                            <button onClick={() => redirectTo('/about')}>Frequently Asked</button>
+                            <button onClick={() => redirectTo('/about')}>Terms of Service</button>
+                            <button onClick={() => redirectTo('/about')}>Refund Policy</button>
                         </DropdownMenu>
                     </DropdownButton>
 
