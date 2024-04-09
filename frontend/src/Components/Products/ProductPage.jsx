@@ -100,8 +100,7 @@ const Product = () => {
 
                 // Check if the request was successful
                 if (response.status === 201) {
-                    console.log('Product added to cart:', cartItem);
-                    setAddedToCartMessage('Product added to cart successfully!');
+                    setAddedToCartMessage(response.data.message);
                     // Reset the message after 3 seconds
                     setTimeout(() => {
                         setAddedToCartMessage('');
@@ -116,6 +115,12 @@ const Product = () => {
         }
     };
 
+    const handleQuantityChange = (e) => {
+        const newQuantity = parseInt(e.target.value, 10);
+        if (newQuantity >= 1) {
+            setQuantity(newQuantity);
+        }
+    };
 
 
     return (
@@ -175,7 +180,7 @@ const Product = () => {
                                 name="quantity"
                                 min="1"
                                 value={quantity}
-                                onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
+                                onChange={handleQuantityChange}
                             />
                         </div>
                         <ul>
