@@ -103,13 +103,7 @@ const Navbar = () => {
                     <li className="nav-item" onClick={() => redirectTo('/')}>Home</li>
 
                     <li className="nav-item" onClick={() => redirectTo('/products')}>Products</li>
-
-                    <DropdownButton id="partners" title="Partners" openDropdown={openDropdown} onToggle={handleDropdownToggle}>
-                        <DropdownMenu>
-                            <button onClick={() => redirectTo('/partners')}>Resellers</button>
-                            <button onClick={() => redirectTo('/sponsors')}>Sponsors</button>
-                        </DropdownMenu>
-                    </DropdownButton>
+                    
                     <DropdownButton id="about" title="About" openDropdown={openDropdown} onToggle={handleDropdownToggle}>
                         <DropdownMenu>
                             <button onClick={() => redirectTo('/about')}>Contact Us</button>
