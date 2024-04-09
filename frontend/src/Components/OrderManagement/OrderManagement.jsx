@@ -36,7 +36,7 @@ const OrderManagement = () => {
             const decoded = decodeToken(token);
             const userId = decoded?._id; // Ensure this matches your token structure
             try {
-                const response = await fetch(`https://tobtf.onrender.com/api/orders/`, {
+                const response = await fetch(`https://tobtf.onrender.com/api/orders/fetchOrders`, {
                     headers: {
                         Authorization: `Bearer ${token}`, // If your API requires authorization
                     },
