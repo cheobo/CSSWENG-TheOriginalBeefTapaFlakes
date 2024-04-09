@@ -113,7 +113,18 @@ const COS = () => {
 			<div className="div2">
 				<div className="square-box">
 					<p><strong>Description:</strong></p>
-					<p>{selectedItem ? `Order ID ${selectedItem._id}: ${selectedItem.status}` : "No item selected"}</p>
+					<p>
+						{selectedItem ? (
+							<>
+								{`Order ID ${selectedItem._id}: ${selectedItem.status}`} <br/>
+								{`Product: ${selectedItem.product}`} <br/>
+								{`Quantity: ${selectedItem.quantity}`} <br/>
+								{`Total Price: ${selectedItem.totalPrice}`} <br/>
+								{`Date Placed: ${selectedItem.datePlaced.slice(0, 10)}`} <br/>
+								{selectedItem.status === 'Delivered' && `Date Completed: ${selectedItem.dateCompleted}`} <br/>
+							</>
+						) : "No item selected"}
+					</p>
 				</div>
 			</div>
 			<div className="div3">
