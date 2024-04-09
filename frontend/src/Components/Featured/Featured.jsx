@@ -39,7 +39,7 @@ const Featured = () => {
             <Fade delay={index * 150} key={product._id} triggerOnce={hasAnimated}>
               <div className={`${styles.item} ${index % 2 === 0 ? styles.row : styles['row-reverse']} ${index === 1 ? styles['second-item'] : ''}`}>
                 <div className={styles.imagecontainer}>
-                  <img src={`https://tobtf.onrender.com//${product.image}`} alt="" className={styles['featured-image']} />
+                  <img src={`https://tobtf.onrender.com/${product.image}`} alt="" className={styles['featured-image']} />
                 </div>
                 <div className={styles.description}>
                   <h2>{product.name}</h2>

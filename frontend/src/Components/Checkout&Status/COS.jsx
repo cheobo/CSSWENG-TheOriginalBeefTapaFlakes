@@ -18,7 +18,7 @@ const COS = () => {
 				data.append('orderId', orderNumber);
 				data.append('proofOfPayment', file);
 
-				const response = await fetch('https://tobtf.onrender.com//api/orders/submitProofOfPayment', {
+				const response = await fetch('https://tobtf.onrender.com/api/orders/submitProofOfPayment', {
 					body: data,
 					method: 'POST',
 				});
@@ -59,7 +59,7 @@ const COS = () => {
 				const decoded_token = decodeToken(localStorage.getItem('jwt'));
 				const userId = decoded_token._id;
 
-				const response = await fetch(`https://tobtf.onrender.com//api/orders/fetchOrders/${userId}`, {
+				const response = await fetch(`https://tobtf.onrender.com/api/orders/fetchOrders/${userId}`, {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
