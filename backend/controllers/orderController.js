@@ -12,7 +12,7 @@ const addOrder = asyncHandler(async(req, res) => {
             product: `${cart.cartItems[i].name}  ${cart.cartItems[i].selectedPackage}`,
             quantity: cart.cartItems[i].quantity,
             totalPrice: cart.cartItems[i].price * cart.cartItems[i].quantity,
-            status: "Processing",
+            status: "Payment Not Confirmed",
             datePlaced: req.body.currentDate
         });
     }
@@ -58,9 +58,24 @@ const submitProofOfPayment = asyncHandler(async (req, res) => {
     }
 });
 
+const updateOrderStatus = asyncHandler(async (req, res) => {
+    const { status } = req.body;
+    const order = await Order.findById(req.params.orderId);
+
+    if (order) {
+        order.status = status;
+        await order.save();
+        res.json({ message: 'Order status updated successfully' });
+    } else {
+        res.status(404);
+        throw new Error('Order not found');
+    }
+});
+
 export {
     addOrder,
     fetchOrders,
     fetchUserOrders,
     submitProofOfPayment,
+    updateOrderStatus,
 };
