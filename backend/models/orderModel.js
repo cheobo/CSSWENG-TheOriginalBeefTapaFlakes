@@ -21,7 +21,11 @@ const orderSchema = mongoose.Schema({
         ],
     },
     datePlaced: Date,
-    dateCompleted: Date
+    dateCompleted: Date,
+    proofOfPayment: {
+        data: Buffer,
+        contentType: String,
+    },
 });
 
 const Order = mongoose.model("Order", orderSchema);

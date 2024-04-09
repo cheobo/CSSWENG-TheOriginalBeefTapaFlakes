@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Modal } from 'react-bootstrap';
+import React, {useEffect, useState} from 'react';
+import {Modal} from 'react-bootstrap';
 import billIcon from '../../Assets/bill.png';
 import './COS.css';
-import { decodeToken } from "react-jwt";
+import {decodeToken} from "react-jwt";
 
 const COS = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -11,10 +11,26 @@ const COS = () => {
 	const [selectedItem, setSelectedItem] = useState(null);
 
 	const handleCloseModal = () => setShowModal(false);
-	const handleConfirmCheckout = () => {
+	const handleConfirmCheckout = async () => {
 		if (file && orderNumber) {
-			// Add your checkout logic here
-			setShowModal(false);
+			try {
+				const data = new FormData();
+				data.append('orderId', orderNumber);
+				data.append('proofOfPayment', file);
+
+				const response = await fetch('http://localhost:5000/api/orders/submitProofOfPayment', {
+					body: data,
+					method: 'POST',
+				});
+
+				if (response.ok) {
+					setShowModal(false);
+				} else {
+					alert('Upload failed, please try again.');
+				}
+			} catch (error) {
+				console.log(error);
+			}
 		} else {
 			alert("Please upload a picture and enter the order number before proceeding.");
 		}
@@ -28,40 +44,38 @@ const COS = () => {
 		setOrderNumber(event.target.value);
 	}
 
-	/*
-	const getOrders = async () => {
-	  const token = localStorage.getItem('jwt');
-  
-	  if (!token) {
-		console.error('JWT token not found in localStorage');
-		return;
-	  }
-  
-	  const decoded_token = decodeToken(localStorage.getItem('jwt'));
-	  const userId = decoded_token._id;
-  
-	  try {
-		const response = await fetch(`http://localhost:5000/api/orders/fetchOrders/${userId}`, {
-		  method: 'GET',
-		  headers: {
-			'Content-Type': 'application/json',
-		  },
-		});
-	  } catch (error) {
-		console.log(error);
-	  }
-	};
-  */
+	const [items, setItems] = useState([]);
 
-	const [items, setItems] = useState([
-		{ orderNumber: 1, status: 'Processing' },
-		{ orderNumber: 2, status: 'Processing' },
-		{ orderNumber: 3, status: 'Processing' },
-		{ orderNumber: 4, status: 'Processing' },
-		{ orderNumber: 5, status: 'Processing' },
-		{ orderNumber: 6, status: 'Processing' },
-		// Add more items here
-	])
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const token = localStorage.getItem('jwt');
+
+				if (!token) {
+					console.error('JWT token not found in localStorage');
+					return;
+				}
+
+				const decoded_token = decodeToken(localStorage.getItem('jwt'));
+				const userId = decoded_token._id;
+
+				const response = await fetch(`http://localhost:5000/api/orders/fetchOrders/${userId}`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				});
+
+				const data = await response.json();
+
+				setItems(data);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+
+		fetchData();
+	}, []);
 
 	return (
 		<div className="parent">
@@ -73,7 +87,7 @@ const COS = () => {
 							key={index}
 							onClick={() => setSelectedItem(selectedItem === item ? null : item)}>
 							<div className="item-details">
-								<p>Order #: {item.orderNumber}</p>
+								<p>Order ID: {item._id}</p>
 								<p>
 									Status: {item.status}
 									<button
@@ -83,8 +97,8 @@ const COS = () => {
 											setShowModal(true);
 										}}
 										disabled={selectedItem !== item} // Disable button if this item is not the selected item
-										style={{ 
-											float: 'right', 
+										style={{
+											float: 'right',
 											cursor: selectedItem === item ? 'pointer' : 'not-allowed', // Change cursor based on whether this item is selected
 											opacity: selectedItem === item ? '1' : '0.5' // Change opacity to indicate disabled state visually for non-selected items
 										}}>
@@ -99,7 +113,7 @@ const COS = () => {
 			<div className="div2">
 				<div className="square-box">
 					<p><strong>Description:</strong></p>
-					<p>{selectedItem ? `Order #${selectedItem.orderNumber}: ${selectedItem.status}` : "No item selected"}</p>
+					<p>{selectedItem ? `Order ID ${selectedItem._id}: ${selectedItem.status}` : "No item selected"}</p>
 				</div>
 			</div>
 			<div className="div3">
@@ -128,14 +142,14 @@ const COS = () => {
 						<tbody>
 							<tr>
 								<td>Upload the proof of payment</td>
-								<td>Order #</td>
+								<td>Order ID</td>
 							</tr>
 							<tr>
 								<td>
 									<input type="file" onChange={handleFileChange} />
 								</td>
 								<td>
-									<input type="text" placeholder="Order #" value={orderNumber} onChange={handleOrderNumberChange} />
+									<input type="text" placeholder="Order ID" value={orderNumber} onChange={handleOrderNumberChange} />
 								</td>
 							</tr>
 						</tbody>

@@ -1,9 +1,6 @@
-import nodemailer from "nodemailer";
 import asyncHandler from "../middlewares/asyncHandler.js";
-import mailTransporter  from "../utils/mailTransporter.js";
 import Cart from "../models/cartModel.js";
 import Order from "../models/orderModel.js";
-import cart from "../data/cart.js";
 
 const addOrder = asyncHandler(async(req, res) => {
     const userId = req.body.userId;
@@ -26,9 +23,37 @@ const addOrder = asyncHandler(async(req, res) => {
 });
 
 const fetchOrders = asyncHandler(async(req, res) => {
-    const orders = await Order.findOne({ userId: req.param.userId });
+    const orders = await Order.find({ userId: req.params.userId });
 
     res.status(200).json(orders);
 });
 
-export { addOrder, fetchOrders };
+const submitProofOfPayment = asyncHandler(async (req, res) => {
+    const orderId = req.body.orderId;
+
+    const order = await Order.findById(orderId);
+
+    if (order) {
+        if (req.file) {
+            order.proofOfPayment = {
+                contentType: req.file.mimetype,
+                data: req.file.buffer,
+            };
+            await order.save();
+
+            res.status(200).json('File successfully uploaded');
+        } else {
+            res.status(400);
+            throw new Error('No file uploaded');
+        }
+    } else {
+        res.status(400);
+        throw new Error("Invalid orderId");
+    }
+});
+
+export {
+    addOrder,
+    fetchOrders,
+    submitProofOfPayment,
+};
