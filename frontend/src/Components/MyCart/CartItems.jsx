@@ -251,16 +251,19 @@ const CartItems = () => {
           </div>
         </div>
       </div>
-      <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm Checkout</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Are you sure you want to proceed to the checkout page?</Modal.Body>
-        <Modal.Footer>
-          <button className="btn" onClick={handleCloseModal}>Cancel</button>
-          <button className="btn" onClick={handleConfirmCheckout}>Confirm</button>
-        </Modal.Footer>
-      </Modal>
+      {showModal && (
+        <div className="checkout-modal">
+          <div className="checkout-modal-content">
+            <span className="close" onClick={handleCloseModal}>&times;</span>
+            <h2>Confirm Checkout</h2>
+            <p>Are you sure you want to proceed to the checkout page?</p>
+            <div className="checkout-modal-buttons">
+              <button className="btn cancel-btn" onClick={handleCloseModal}>Cancel</button>
+              <button className="btn confirm-btn" onClick={handleConfirmCheckout}>Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
