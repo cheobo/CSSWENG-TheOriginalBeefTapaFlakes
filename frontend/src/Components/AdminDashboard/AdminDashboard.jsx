@@ -4,6 +4,7 @@ import './AdminDashboard.css';
 import deleteIcon from '../../Assets/delete.png';
 import { PRODUCT_URL } from '../../API/constants.js';
 import axiosInstance from '../../API/axiosInstance.js'
+import { decodeToken } from 'react-jwt';
 
 function EditModal({ isOpen, onClose, product, onSave }) {
     const [editedProduct, setEditedProduct] = useState({});
@@ -320,10 +321,14 @@ const AdminDashboard = () => {
     }, [errorMessage]);
     
     useEffect(() => {
+        const decoded_token = decodeToken(token);
+				const isAdmin = decoded_token.isAdmin;
         // Check if there is a valid token in the local storage
         if (!token) {
             // Redirect to the login page if there is no token
             navigate('/login');
+        } else if (token && !isAdmin) {
+            navigate('/');
         }
     }, [token, navigate])
 

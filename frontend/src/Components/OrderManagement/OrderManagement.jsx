@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import './OrderManagement.css';
 import { decodeToken } from "react-jwt";
+import { useNavigate } from 'react-router-dom';
 
 const OrderManagement = () => {
     const [filter, setFilter] = useState('All Orders');
@@ -11,6 +12,19 @@ const OrderManagement = () => {
     const [orders, setOrders] = useState([]);
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [token, setToken] = useState(localStorage.getItem('jwt'));
+    
+    useEffect(() => {
+        const decoded_token = decodeToken(token);
+				const isAdmin = decoded_token.isAdmin;
+        // Check if there is a valid token in the local storage
+        if (!token) {
+            // Redirect to the login page if there is no token
+            navigate('/login');
+        } else if (token && !isAdmin) {
+            navigate('/');
+        }
+    }, [token, navigate])
 
     useEffect(() => {
         const fetchOrders = async () => {
