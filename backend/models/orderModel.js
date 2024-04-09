@@ -11,13 +11,13 @@ const orderSchema = mongoose.Schema({
     status: {
         type: String,
         enum: [
+            "Payment Not Confirmed",
             "Canceled",
-            "Confirmed",
-            "Delivered",
             "Paid",
-            "Payment not confirmed",
             "Processing",
+            "Packed",
             "Shipped",
+            "Delivered",
         ],
     },
     datePlaced: Date,
