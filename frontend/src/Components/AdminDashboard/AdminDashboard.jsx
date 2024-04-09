@@ -480,7 +480,6 @@ const AdminDashboard = () => {
                 </h1>
             {successMessage && <PopupMessage message={successMessage} type="success" />}
             {errorMessage && <PopupMessage message={errorMessage} type="error" />}
-                <h1 className="dashboard-title">Product Management</h1>
                 <div className="admin-grid-product">
                     <div className="admin-cart-container">
                         <div className="admin-flex-container">
