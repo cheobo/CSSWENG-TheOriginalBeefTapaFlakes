@@ -61,11 +61,16 @@ const submitProofOfPayment = asyncHandler(async (req, res) => {
 });
 
 const updateOrderStatus = asyncHandler(async (req, res) => {
-    const { status } = req.body;
+    const { status, dateCompleted } = req.body;
     const order = await Order.findById(req.params.orderId);
 
     if (order) {
         order.status = status;
+        if (order.status === 'Delivered'){
+            order.dateCompleted = dateCompleted;
+        } else {
+            order.dateCompleted === null;
+        }
         await order.save();
         res.json({ message: 'Order status updated successfully' });
     } else {
