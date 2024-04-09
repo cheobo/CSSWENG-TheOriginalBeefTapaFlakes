@@ -10,6 +10,16 @@ const { ObjectId } = mongoose.Types;
 
 const router = express.Router();
 
+const ensureUploadsDirectoryExists = () => {
+    const uploadDir = 'uploads';
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir);
+    }
+};
+
+// Ensure that the uploads directory exists
+ensureUploadsDirectoryExists();
+
 // Multer configuration for handling file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
