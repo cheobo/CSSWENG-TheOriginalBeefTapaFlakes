@@ -93,6 +93,14 @@ const OrderManagement = () => {
         setSearchQuery(e.target.value);
     };
 
+    const formatDate = (isoDateString) => {
+        if (!isoDateString) return '';
+        const date = new Date(isoDateString);
+        const formattedDate = date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+        const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        return `${formattedDate} ${formattedTime}`;
+    };
+
     return (
         <div className="order-grid-container">
             <div className="order-elements-container">
@@ -189,7 +197,7 @@ const OrderManagement = () => {
                             <tbody>
                                 <tr>
                                     <td>Customer Username: </td>
-                                    <td>{selectedOrderDetails.customerUsername}</td>
+                                    <td>{selectedOrderDetails.userId}</td>
                                 </tr>
                                 <tr>
                                     <td>Product Ordered: </td>
@@ -209,15 +217,15 @@ const OrderManagement = () => {
                                 </tr>
                                 <tr>
                                     <td>Payment Proof: </td>
-                                    <td>{selectedOrderDetails.paymentProof}</td>
+                                    <td>{selectedOrderDetails.proofOfPayment}</td>
                                 </tr>
                                 <tr>
                                     <td>Order Date Placed: </td>
-                                    <td>{selectedOrderDetails.datePlaced}</td>
+                                    <td>{formatDate(selectedOrderDetails.datePlaced)}</td>
                                 </tr>
                                 <tr>
                                     <td>Order Date Completed: </td>
-                                    <td>{selectedOrderDetails.orderDateCompleted}</td>
+                                    <td>{formatDate(selectedOrderDetails.dateCompleted)}</td>
                                 </tr>
                             </tbody>
                         </table>
