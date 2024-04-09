@@ -26,9 +26,9 @@ app.get("/", (req,res)=>{
 
 const port = process.env.PORT || 5000
 
-app.use(cors({
-    origin: "https://tobtf-frontend.onrender.com" //replace frontend url
-}));
+// app.use(cors({
+//     origin: "https://tobtf-frontend.onrender.com" //replace frontend url
+// }));
 app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
