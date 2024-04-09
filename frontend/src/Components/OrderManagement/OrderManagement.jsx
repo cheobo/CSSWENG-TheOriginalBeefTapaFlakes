@@ -83,6 +83,7 @@ const OrderManagement = () => {
     };
 
     const handleStatusChange = async (orderId, newStatus) => {
+        const today = new Date().toISOString(); // Get current date and time in ISO format
         try {
             // Assuming you're using Bearer token authentication
             const token = localStorage.getItem('jwt');
@@ -92,7 +93,7 @@ const OrderManagement = () => {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`, // Include your auth token here
                 },
-                body: JSON.stringify({ status: newStatus }),
+                body: JSON.stringify({ status: newStatus, dateCompleted: today }),
             });
 
             if (!response.ok) {
@@ -104,14 +105,14 @@ const OrderManagement = () => {
             setTimeout(() => setSuccessMessage(''), 3000);
     
             // Update the status locally for immediate UI feedback
-            const today = new Date().toISOString(); // Get current date and time in ISO format
+            
 
             const updatedOrders = orders.map((order) => {
                 if (order._id === orderId) {
                     if (order.status === "Delivered") {
                         return { ...order, status: newStatus, dateCompleted: today };
                     }
-                    return { ...order, status: newStatus };
+                    return { ...order, status: newStatus, dateCompleted: null };
                 }
                 return order;
             });
