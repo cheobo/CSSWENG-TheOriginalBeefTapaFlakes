@@ -38,11 +38,20 @@ const OrderManagement = () => {
     );
 
     const openOrderDetailsModal = (orderId) => {
-        // Find the order details by orderNumber
+        // Find the order details by orderId
         const orderDetails = orders.find(order => order._id === orderId);
         if (orderDetails) {
-            setSelectedOrderDetails(orderDetails);
-            setShowDetailsModal(true);
+            // Decode the JWT token from localStorage to get the username
+            const token = localStorage.getItem('jwt');
+            const decoded = decodeToken(token);
+    
+            // Check if the userId in the order matches the userId in the token
+            if (orderDetails.userId === decoded._id) {
+                // Add the username from the decoded token to the order details
+                const orderDetailsWithUsername = { ...orderDetails, username: decoded.username };
+                setSelectedOrderDetails(orderDetailsWithUsername);
+                setShowDetailsModal(true);
+            }
         }
     };
 
@@ -91,6 +100,14 @@ const OrderManagement = () => {
     // Function to handle search change
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
+    };
+
+    const formatDate = (isoDateString) => {
+        if (!isoDateString) return '';
+        const date = new Date(isoDateString);
+        const formattedDate = date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+        const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        return `${formattedDate} ${formattedTime}`;
     };
 
     return (
@@ -189,14 +206,14 @@ const OrderManagement = () => {
                             <tbody>
                                 <tr>
                                     <td>Customer Username: </td>
-                                    <td>{selectedOrderDetails.customerUsername}</td>
+                                    <td>{selectedOrderDetails.username}</td>
                                 </tr>
                                 <tr>
                                     <td>Product Ordered: </td>
                                     <td>{selectedOrderDetails.product}</td>
                                 </tr>
                                 <tr>
-                                    <td>Count: </td>
+                                    <td>Quantity: </td>
                                     <td>{selectedOrderDetails.quantity}</td>
                                 </tr>
                                 <tr>
@@ -204,20 +221,30 @@ const OrderManagement = () => {
                                     <td>{selectedOrderDetails.address}</td>
                                 </tr>
                                 <tr>
-                                    <td>Status: </td>
+                                    <td>Current Status: </td>
                                     <td>{selectedOrderDetails.status}</td>
                                 </tr>
                                 <tr>
-                                    <td>Payment Proof: </td>
-                                    <td>{selectedOrderDetails.paymentProof}</td>
+                                    <td>Proof of Payment: </td>
+                                    <td>
+                                        {selectedOrderDetails.proofOfPayment && selectedOrderDetails.proofOfPayment.data ? (
+                                            <img
+                                                src={`data:${selectedOrderDetails.proofOfPayment.contentType};base64,${selectedOrderDetails.proofOfPayment.data}`}
+                                                alt="Proof of Payment"
+                                                style={{ width: '100px', height: '100px' }}
+                                            />
+                                        ) : 'No proof of payment uploaded'}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Order Date Placed: </td>
-                                    <td>{selectedOrderDetails.datePlaced}</td>
+                                    <td>{formatDate(selectedOrderDetails.datePlaced)}</td>
                                 </tr>
                                 <tr>
                                     <td>Order Date Completed: </td>
-                                    <td>{selectedOrderDetails.orderDateCompleted}</td>
+                                    <td>
+                                        {formatDate(selectedOrderDetails.dateCompleted)}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
