@@ -5,7 +5,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './Components/Views/Home/Home.jsx';
 import Products from './Components/Views/ProductList_Views/ProductList_Views.jsx';
 import ProductList from './Components/ProductList/ProductList.jsx';
-import Partners from './Components/Views/Partners/Partners.jsx';
 import About from './Components/Views/About/About.jsx';
 import ProductPage from './Components/Views/Products/ProductPage_Views.jsx';
 import Login from './Components/Views/Login/Login_Views.jsx';
@@ -74,12 +73,10 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/products/:productId" element={<ProductPage />} />
                     <Route path="/products" element={<Products category="list" />} />
-                    <Route path="/partners/resellers" element={<Partners category="resellers" />} />
-                    <Route path="/partners/sponsors" element={<Partners category="sponsors" />} />
-                    <Route path="/about/contact" element={<About category="contact" />} />
-                    <Route path="/about/faq" element={<About category="faq" />} />
-                    <Route path="/about/terms" element={<About category="terms" />} />
-                    <Route path="/about/refund" element={<About category="refund" />} />
+                    <Route path="/about" element={<About  />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/about" element={<About />} />
                     <Route path="/product-management" element={<AdminDashboard />} />
                     <Route path="/order-management" element={<OrderManagement />} />
                     <Route path="/cart" element={<Cart />} />
