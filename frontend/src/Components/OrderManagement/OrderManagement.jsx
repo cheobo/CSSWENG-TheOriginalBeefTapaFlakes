@@ -38,11 +38,20 @@ const OrderManagement = () => {
     );
 
     const openOrderDetailsModal = (orderId) => {
-        // Find the order details by orderNumber
+        // Find the order details by orderId
         const orderDetails = orders.find(order => order._id === orderId);
         if (orderDetails) {
-            setSelectedOrderDetails(orderDetails);
-            setShowDetailsModal(true);
+            // Decode the JWT token from localStorage to get the username
+            const token = localStorage.getItem('jwt');
+            const decoded = decodeToken(token);
+    
+            // Check if the userId in the order matches the userId in the token
+            if (orderDetails.userId === decoded._id) {
+                // Add the username from the decoded token to the order details
+                const orderDetailsWithUsername = { ...orderDetails, username: decoded.username };
+                setSelectedOrderDetails(orderDetailsWithUsername);
+                setShowDetailsModal(true);
+            }
         }
     };
 
@@ -197,14 +206,14 @@ const OrderManagement = () => {
                             <tbody>
                                 <tr>
                                     <td>Customer Username: </td>
-                                    <td>{selectedOrderDetails.userId}</td>
+                                    <td>{selectedOrderDetails.username}</td>
                                 </tr>
                                 <tr>
                                     <td>Product Ordered: </td>
                                     <td>{selectedOrderDetails.product}</td>
                                 </tr>
                                 <tr>
-                                    <td>Count: </td>
+                                    <td>Quantity: </td>
                                     <td>{selectedOrderDetails.quantity}</td>
                                 </tr>
                                 <tr>
@@ -212,12 +221,20 @@ const OrderManagement = () => {
                                     <td>{selectedOrderDetails.address}</td>
                                 </tr>
                                 <tr>
-                                    <td>Status: </td>
+                                    <td>Current Status: </td>
                                     <td>{selectedOrderDetails.status}</td>
                                 </tr>
                                 <tr>
-                                    <td>Payment Proof: </td>
-                                    <td>{selectedOrderDetails.proofOfPayment}</td>
+                                    <td>Proof of Payment: </td>
+                                    <td>
+                                        {selectedOrderDetails.proofOfPayment && selectedOrderDetails.proofOfPayment.data ? (
+                                            <img
+                                                src={`data:${selectedOrderDetails.proofOfPayment.contentType};base64,${selectedOrderDetails.proofOfPayment.data}`}
+                                                alt="Proof of Payment"
+                                                style={{ width: '100px', height: '100px' }}
+                                            />
+                                        ) : 'No proof of payment uploaded'}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Order Date Placed: </td>
@@ -225,7 +242,9 @@ const OrderManagement = () => {
                                 </tr>
                                 <tr>
                                     <td>Order Date Completed: </td>
-                                    <td>{formatDate(selectedOrderDetails.dateCompleted)}</td>
+                                    <td>
+                                        {formatDate(selectedOrderDetails.dateCompleted)}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
