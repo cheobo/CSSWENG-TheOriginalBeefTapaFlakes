@@ -27,7 +27,7 @@ app.get("/", (req,res)=>{
 const port = process.env.PORT || 5000
 
 app.use(cors({
-    origin: "https://theoriginalbeeftapaflakes-9u0t.onrender.com/"
+    origin: "https://theoriginalbeeftapaflakes-9u0t.onrender.com"
 }));
 
 app.use(express.json());
