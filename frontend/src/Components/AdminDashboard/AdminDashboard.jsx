@@ -321,14 +321,17 @@ const AdminDashboard = () => {
     }, [errorMessage]);
     
     useEffect(() => {
-        const decoded_token = decodeToken(token);
-				const isAdmin = decoded_token.isAdmin;
+    
         // Check if there is a valid token in the local storage
         if (!token) {
             // Redirect to the login page if there is no token
             navigate('/login');
-        } else if (token && !isAdmin) {
-            navigate('/');
+        } else {
+            const decoded_token = decodeToken(token);
+            const isAdmin = decoded_token.isAdmin;
+            if (!isAdmin) {
+                navigate('/');
+            }
         }
     }, [token, navigate])
 
