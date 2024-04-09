@@ -13,6 +13,7 @@ const OrderManagement = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [token, setToken] = useState(localStorage.getItem('jwt'));
+    const navigate = useNavigate();
     
     useEffect(() => {
     
@@ -35,7 +36,7 @@ const OrderManagement = () => {
             const decoded = decodeToken(token);
             const userId = decoded?._id; // Ensure this matches your token structure
             try {
-                const response = await fetch(`https://tobtf.onrender.com/api/orders/fetchOrders/${userId}`, {
+                const response = await fetch(`https://tobtf.onrender.com/api/orders/`, {
                     headers: {
                         Authorization: `Bearer ${token}`, // If your API requires authorization
                     },
