@@ -1,5 +1,6 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
 import Product from "../models/productModel.js";
+import fs from "fs";
 
 const getProducts = asyncHandler(async (req, res) => {
     const products = await Product.find({});
@@ -149,9 +150,12 @@ const updateProduct = asyncHandler(async (req, res) => {
                     product.packages.splice(existingPackageIndex, 1); // Remove the package at existingPackageIndex
                     await product.save(); // Save the updated product
                     if (product.packages.length < 1) {
+                        const image = product.image;
+                        if (image) {
+                            fs.unlinkSync(image); // Delete the image file
+                        }
                         await product.deleteOne({ _id: productId})
                     }
-                    console.log(product.packages)
                     res.status(200).json({ message: `Product: ${productName} and Package/Option: ${packageName} deleted successfully`});
                 } else {
                     res.status(404).json({ message: `Package/Option: ${packageName} in Product: ${product.name} does not exist`})

@@ -325,7 +325,6 @@ const AdminDashboard = () => {
                 });
 
                 if (response.status === 200) {
-                    console.log(response.data)
                     setSuccessMessage(response.data.message);
                 }
             } catch (error) {
