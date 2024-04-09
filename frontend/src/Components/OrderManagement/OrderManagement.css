@@ -218,3 +218,7 @@
     border: 1px solid black;
     cursor: pointer;
 }
+
+.order-open-product-btn:hover {
+    background-color: #f0f0f0;
+}
