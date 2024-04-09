@@ -27,7 +27,7 @@ app.get("/", (req,res)=>{
 const port = process.env.PORT || 5000
 
 app.use(cors({
-    origin: "http://localhost:3000"
+    origin: "https://tobtf-frontend.onrender.com" //replace frontend url
 }));
 app.use(express.json());
 app.use("/api/users", userRoutes);
@@ -40,5 +40,5 @@ const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 app.listen(port,()=>{
-    console.log(`Server at http://localhost:${port}`)
+    console.log(`Server running on port ${port}`)
 })
