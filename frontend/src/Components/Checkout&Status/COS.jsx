@@ -93,14 +93,14 @@ const COS = () => {
 									<button
 										className="bill-btn"
 										onClick={(e) => {
-											e.stopPropagation(); // Prevent click from bubbling to item div.
+											e.stopPropagation(); 
 											setShowModal(true);
 										}}
-										disabled={selectedItem !== item} // Disable button if this item is not the selected item
+										disabled={selectedItem !== item}
 										style={{
 											float: 'right',
-											cursor: selectedItem === item ? 'pointer' : 'not-allowed', // Change cursor based on whether this item is selected
-											opacity: selectedItem === item ? '1' : '0.5' // Change opacity to indicate disabled state visually for non-selected items
+											cursor: selectedItem === item ? 'pointer' : 'not-allowed', 
+											opacity: selectedItem === item ? '1' : '0.5' 
 										}}>
 										<img src={billIcon} alt="bill" style={{ border: 'none', width: '30px', height: '30px' }} />
 									</button>

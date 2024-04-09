@@ -10,16 +10,24 @@ const AboutInfo = () => {
       
       <div className="collapsible-sections">
         <Collapsible trigger="Shipping">
-          <p>Content for Shipping...</p>
+          <p>Via Shoppee or via website.</p>
         </Collapsible>
         <Collapsible trigger="Service Hours">
-          <p>Content for Service Hours...</p>
+          <p>7 Days a week, orders are processed until shipping dates.</p>
         </Collapsible>
         <Collapsible trigger="Contact Info">
-          <p>Content for Contact Info...</p>
+          <p>0963 690 9006 (Kristine Gail Sandoval)</p>
+          <p>0917 426 4330 (Raul Zamora Jr.)</p>
         </Collapsible>
         <Collapsible trigger="Payment Options">
-          <p>Content for Payment Options...</p>
+        <p>BDO Savings: 005430247449 (Kristine Gail Sandoval)</p>
+					<p>RCBC Checking / RCBC Diskartech: 7590702855</p>
+					<p>(Kristine Gail Sandoval-Zamora)</p>
+					<p>Limited BPI to BPI Only: 8489340519</p>
+					<p>(Kristine Gail Sandoval)</p>
+					<p>GCash: 0963 690 9006 (Kristine Gail Sandoval)</p>
+					<p>Alternative GCash: 0917 426 4330 (Raul Zamora Jr.)</p>
+					<p>UnionBank Savings: 1093 4042 0640 (Kristine Gail Sandoval)</p>
         </Collapsible>
         <Collapsible trigger="FAQ">
           <p>Content for FAQ...</p>
