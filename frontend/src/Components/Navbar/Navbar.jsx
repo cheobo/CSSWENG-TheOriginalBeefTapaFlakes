@@ -144,7 +144,7 @@ const Navbar = () => {
                         {token ? (
                             <>
                                 <div className="username-display">
-                                    Logged in as <span style={{ color: '#FF0000' }}>{`${decodedToken.username}`}</span>
+                                    Logged in as <span style={{ color: '#FF0000', fontWeight: 'bold' }}>{`${decodedToken.username}`}</span>
                                 </div>
                                 {isAdmin && <button onClick={() => redirectTo('/createadmin')}>Create New Admin</button>}
                                 <button onClick={handleLogout}>Logout</button>

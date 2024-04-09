@@ -1,468 +1,209 @@
 import React, { useEffect, useState } from 'react';
+import { Modal } from 'react-bootstrap';
 import './OrderManagement.css';
-import deleteIcon from '../../Assets/delete.png';
-
-function EditModal({ isOpen, onClose, product, onSave }) {
-    const [editedProduct, setEditedProduct] = useState({});
-    const [imageFile, setImageFile] = useState(null);
-
-    useEffect(() => {
-        if (product && isOpen) {
-            const bottlesPerFlavorString = product.bottlesPerFlavor
-                ? product.bottlesPerFlavor.map(bottle => `${bottle.flavor}: ${bottle.quantity}`).join('\n')
-                : '';
-
-            setEditedProduct({
-                productImage: product.image || '',
-                productName: product.productName || '',
-                description: product.description || '',
-                packageOption: product.packageOption || '',
-                packageSize: product.packageSize || '',
-                bottlesPerFlavor: bottlesPerFlavorString || '',
-                price: product.price?.$numberDecimal?.toString() || '',
-                inventory: product.currentInventory?.toString() || '',
-                ingredients: product.ingredients || '',
-                nutritionalInfo: product.nutritionalInfo || '',
-            });
-        }
-    }, [product, isOpen]);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-
-        // If the input is of type number and the value is negative, set it to 0
-        if (e.target.type === 'number' && parseFloat(value) < 0) {
-            return setEditedProduct(prevState => ({
-                ...prevState,
-                [name]: 0
-            }));
-        }
-
-        // Otherwise, update the state normally
-        setEditedProduct(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-
-    const handleSubmit = () => {
-        if (editedProduct.bottlesPerFlavor) {
-            const bottlesPerFlavorArray = editedProduct.bottlesPerFlavor.split('\n').map(line => {
-                const [flavor, quantity] = line.split(':').map(part => part.trim());
-                return { flavor, quantity: parseInt(quantity, 10) };
-            });
-
-
-            const updatedProduct = { ...editedProduct, bottlesPerFlavor: bottlesPerFlavorArray };
-            onSave(product.productId, product.packageId, updatedProduct);
-        } else {
-            onSave(product.productId, product.packageId, editedProduct);
-        }
-        handleImageUpload()
-        onClose();
-    };
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        setImageFile(file);
-    }
-
-    const handleImageUpload = async () => {
-        if (imageFile) {
-            try {
-                const formData = new FormData();
-                formData.append('file', imageFile);
-                const response = await fetch(`http://localhost:5000/api/upload/${product.productId}`, {
-                    method: 'PUT',
-                    body: formData,
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to upload image');
-                }
-
-                const imageUrl = await response.json();
-                setEditedProduct(prevState => ({
-                    ...prevState,
-                    productImage: imageUrl,
-                }));
-            } catch (error) {
-                console.error('Error uploading image:', error);
-            }
-        }
-    }
-
-    if (!isOpen) return null;
-
-    return (
-        <div className="modal">
-            <div className="modal-content">
-                <h2>Edit Product</h2>
-                <table className="modal-table">
-                    <tbody>
-                        {Object.entries(editedProduct).map(([key, value]) => (
-                            <tr key={key}>
-                                <td>{key.charAt(0).toUpperCase() + key.slice(1)}:</td>
-                                <td>
-                                    {['productName', 'description', 'packageOption', 'bottlesPerFlavor', 'ingredients', 'nutritionalInfo'].includes(key) ? (
-                                        <textarea
-                                            name={key}
-                                            value={value}
-                                            onChange={handleChange}
-                                            placeholder={`Enter ${key.charAt(0).toUpperCase() + key.slice(1)}`}
-                                            rows="3"
-                                        />
-                                    ) : key === 'productImage' ? (
-                                        <div>
-                                            <input
-                                                type="file"
-                                                name={key}
-                                                accept="image/"
-                                                onChange={handleImageChange}
-                                            />
-                                        </div>
-
-                                    ) : (
-                                        <input
-                                            type={key === 'price' || key === 'inventory' || key === 'packageSize' ? 'number' : 'text'}
-                                            name={key}
-                                            value={value}
-                                            onChange={handleChange}
-                                            placeholder={`Enter ${key.charAt(0).toUpperCase() + key.slice(1)}`}
-                                            step={key === 'price' ? '0.01' : '1'}
-                                        />
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <div className='modal-buttons'>
-                    <button className="modal-save-inventory-btn" onClick={handleSubmit}>SAVE</button>
-                    <button className="modal-cancel-inventory-btn" onClick={onClose}>CANCEL</button>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-function AddModal({ isOpen, onClose, onSave }) {
-    const [newProduct, setNewProduct] = useState({
-        productName: '',
-        description: '',
-        packageOption: '',
-        packageSize: '',
-        bottlesPerFlavor: '',
-        price: '',
-        inventory: '',
-        ingredients: '',
-        nutritionalInfo: '',
-    });
-    const [imageFile, setImageFile] = useState(null);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-
-        // If the input is of type number and the value is negative, set it to 0
-        if (e.target.type === 'number' && parseFloat(value) < 0) {
-            return setNewProduct(prevState => ({
-                ...prevState,
-                [name]: 0
-            }));
-        }
-
-        // Otherwise, update the state normally
-        setNewProduct(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-
-    const handleSubmit = () => {
-        if (newProduct.bottlesPerFlavor) {
-            const bottlesPerFlavorArray = newProduct.bottlesPerFlavor.split('\n').map(line => {
-                const [flavor, quantity] = line.split(':').map(part => part.trim());
-                return { flavor, quantity: parseInt(quantity, 10) };
-            });
-
-
-            const updatedProduct = { ...newProduct, bottlesPerFlavor: bottlesPerFlavorArray };
-            onSave(updatedProduct);
-        } else {
-            onSave(newProduct);
-        }
-        onClose();
-    };
-
-
-    if (!isOpen) return null;
-
-    return (
-        <div className="modal">
-            <div className="modal-content">
-                <h2>Add Product</h2>
-                <table className="modal-table">
-                    <tbody>
-                        {Object.entries(newProduct).map(([key, value]) => (
-                            <tr key={key}>
-                                <td>{key.charAt(0).toUpperCase() + key.slice(1)}:</td>
-                                <td>
-                                    {['productName', 'description', 'packageOption', 'bottlesPerFlavor', 'ingredients', 'nutritionalInfo'].includes(key) ? (
-                                        <textarea
-                                            name={key}
-                                            value={value}
-                                            onChange={handleChange}
-                                            placeholder={
-                                                key === 'productName' ? "e.g., Sub-Reseller Package" :
-                                                    key === 'description' ? "e.g., Discover convenience and profit with our..." :
-                                                        key === 'packageOption' ? "e.g., Package A" :
-                                                            key === 'bottlesPerFlavor' ? "e.g.,\nClassic: 5\nSpicy: 5" :
-                                                                key === 'ingredients' ? "e.g., Beef, Salt, Pepper..." :
-                                                                    key === 'nutritionalInfo' ? "e.g., Placeholder" :
-                                                                        "Placeholder"
-                                            }
-                                            rows="3"
-                                        />
-                                    ) : (
-                                        <input
-                                            type={key === 'price' || key === 'inventory' || key == 'packageSize' ? 'number' : 'text'}
-                                            name={key}
-                                            value={value}
-                                            onChange={handleChange}
-                                            placeholder={
-                                                key === 'packageSize' ? "e.g., 330" :
-                                                    key === 'price' ? "e.g., 1975.0" :
-                                                        key === 'inventory' ? "e.g., 10" :
-                                                            "Placeholder"
-                                            }
-                                            step={key === 'price' ? '0.01' : '1'}
-                                        />
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <div className='modal-buttons'>
-                    <button className="modal-save-inventory-btn" onClick={handleSubmit}>SAVE</button>
-                    <button className="modal-cancel-inventory-btn" onClick={onClose}>CANCEL</button>
-                </div>
-            </div>
-        </div>
-    );
-}
 
 const OrderManagement = () => {
-    const [products, setProducts] = useState([]);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [currentEditProduct, setCurrentEditProduct] = useState(null);
+    const [filter, setFilter] = useState('All Orders');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
+    const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
 
-    // Effect for disabling/enabling body scroll
-    useEffect(() => {
-        const originalStyle = document.body.style.overflow;
-        document.body.style.overflow = isEditModalOpen || isAddModalOpen ? 'hidden' : 'auto';
-        return () => {
-            document.body.style.overflow = originalStyle;
-        };
-    }, [isEditModalOpen, isAddModalOpen]);
+    const [items, setItems] = useState([
+        { orderNumber: 1, status: 'Payment Not Confirmed' },
+        { orderNumber: 2, status: 'Delivered' },
+        { orderNumber: 3, status: 'Paid' },
+        { orderNumber: 4, status: 'Processing' },
+        { orderNumber: 5, status: 'Packed' },
+        { orderNumber: 6, status: 'Shipped' },
+        { orderNumber: 7, status: 'Cancelled' },
+        { orderNumber: 8, status: 'Delivered' },
+        // Add more items here
+    ]);
 
-    const handleDelete = async (productId, packageId) => {
-        if (window.confirm('Are you sure you want to delete this product?')) {
-            try {
-                const token = localStorage.getItem('jwt');
-                const response = await fetch(`http://localhost:5000/api/products/remove/${productId}/${packageId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
+    const [orderDetails, setOrderDetails] = useState([
+        { orderNumber: 1,
+            customerUsername: 'placeholder',
+            productOrdered: 'Sub Reseller Package [Package A]',
+            productOrderedCount: 1,
+            address: 'placeholder',
+            currentOrderStatus: 'Payment Not Confirmed',
+            paymentProof: '',
+            orderDatePlaced: '4/7/2024',
+            orderDateCompleted: '' },
+        { orderNumber: 2,
+          customerUsername: 'placeholder',
+          productOrdered: 'Sub Reseller Package [Package A]',
+          productOrderedCount: 1,
+          address: 'placeholder',
+          currentOrderStatus: 'Delivered',
+          paymentProof: 'Paid',
+          orderDatePlaced: '4/7/2024',
+          orderDateCompleted: '4/9/2024' },
+    ]);
 
-                if (!response.ok) {
-                    throw new Error('Failed to delete product');
-                }
+    const openOrderDetailsModal = (orderNumber) => {
+        // Find the order details by orderNumber
+        const details = orderDetails.find(order => order.orderNumber === orderNumber);
+        if (orderDetails) {
+            setSelectedOrderDetails(details);
+            setShowDetailsModal(true);
+        }
+    };
 
-                console.log('Product deleted successfully');
-            } catch (error) {
-                console.error('Error deleting product:', error);
-                alert('An error occurred while deleting the product.');
+    const handleStatusChange = (orderNumber, newStatus) => {
+        const updatedItems = items.map((item) => {
+            if (item.orderNumber === orderNumber) {
+                return { ...item, status: newStatus };
             }
-        }
+            return item;
+        });
+        setItems(updatedItems);
     };
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/api/products');
-                if (!response.ok) throw new Error('Failed to fetch products');
-                const productsData = await response.json();
-                const flattenedProducts = productsData.flatMap(product =>
-                    product.packages.map(packageItem => ({
-                        packageId: packageItem._id,
-                        productId: product._id,
-                        productName: product.name,
-                        description: product.description,
-                        packageOption: packageItem.packageOption,
-                        packageSize: packageItem.packageSize,
-                        bottlesPerFlavor: packageItem.bottlesPerFlavor,
-                        price: packageItem.price,
-                        currentInventory: packageItem.countInStock,
-                        ingredients: product.ingredients,
-                        nutritionalInfo: product.nutriInfo,
-                        image: product.image,
-                        imageId: product.imageId
-                    }))
-                );
-                setProducts(flattenedProducts);
-            } catch (error) {
-                console.error('Error fetching products:', error);
-            }
-        };
-        fetchProducts();
-    }, [products]);
-
-    const addNewProduct = () => {
-        setIsAddModalOpen(true);
+    // Function to handle filter change
+    const handleFilterChange = (e) => {
+        setFilter(e.target.value);
     };
 
-    const navigateToProduct = (productId) => {
-        window.location.href = `/products/${productId}`;
-    };
-
-    const startEdit = (product) => {
-        setCurrentEditProduct(product);
-        setIsEditModalOpen(true);
-    };
-
-    const saveEdits = async (productId, packageId, updatedProduct) => {
-        const token = localStorage.getItem('jwt');
-        try {
-            const response = await fetch(`http://localhost:5000/api/products/${productId}/${packageId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(updatedProduct),
-            });
-
-            if (!response.ok) throw new Error('Failed to update the product details');
-            const editedProduct = await response.json();
-            console.log(editedProduct.message);
-
-            setIsEditModalOpen(false);
-            // Refresh the product list or update state if necessary
-        } catch (error) {
-            console.error('Error updating product:', error);
-        }
-    };
-
-    const handleAddProduct = async (newProductData) => {
-        const token = localStorage.getItem('jwt');
-        try {
-            // Send the new product data to the server
-            const response = await fetch('http://localhost:5000/api/products/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(newProductData),
-            });
-
-            if (!response.ok) throw new Error('Failed to add new product');
-            const updatedProducts = await response.json();
-            setProducts([...products, updatedProducts]);
-
-
-            console.log(updatedProducts.message)
-            // Close the modal after saving
-            setIsAddModalOpen(false);
-        } catch (error) {
-            console.error('Error adding new product:', error);
-        }
+    // Function to handle search change
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
     };
 
     return (
-        <div className="admin-grid-container">
-            <div className="admin-elements-container">
-                <h1 className="dashboard-title">Order Management</h1>
-                <div className="admin-grid-product">
-                    <div className="admin-cart-container">
-                        <div className="admin-flex-container">
-                            <div className="admin-product-container">
-                                {products.map((product) => (
-                                    <div key={product.packageId} className="item">
-                                        <img src={`http://localhost:5000/${product.image}`} alt={product.productName} />
-                                        <div className="admin-product-details">
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                <p>{product.productName} [{product.packageOption}]</p>
-                                                <div className="product-action-buttons">
-                                                    <button
-                                                        className="open-product-btn"
-
-                                                        onClick={() => navigateToProduct(product.productId)}
-                                                    >
-                                                        OPEN
-                                                    </button>
-                                                    <button
-                                                        className="admin-delete-btn"
-                                                        style={{ float: 'right' }}
-                                                        onClick={() => handleDelete(product.productId, product.packageId)}
-                                                    >
-                                                        <img src={deleteIcon} alt="delete" />
-                                                    </button>
+        <div className="order-grid-container">
+            <div className="order-elements-container">
+                <h1 className="order-dashboard-title">
+                    Order Management
+                    <div>
+                        <span className="order-filter-search">
+                            Search:
+                            <input
+                                type="text"
+                                placeholder="Order # (e.g. 1)"
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                            />
+                        </span>
+                        <span className="order-filter-dropdown">
+                            Filter:
+                            <select
+                                onChange={handleFilterChange}
+                                value={filter}
+                            >
+                                <option value="All Orders">All Orders</option>
+                                <option value="Payment Not Confirmed">Payment Not Confirmed</option>
+                                <option value="Cancelled">Cancelled</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Processing">Processing</option>
+                                <option value="Packed">Packed</option>
+                                <option value="Shipped">Shipped</option>
+                                <option value="Delivered">Delivered</option>
+                            </select>
+                        </span>
+                    </div>
+                </h1>
+                <div className="order-grid-product">
+                    <div className="order-cart-container">
+                        <div className="order-flex-container">
+                            <div className="order-product-container">
+                                {items
+                                    .filter(order => filter === "All Orders" || order.status === filter)
+                                    .filter(order => searchQuery === '' || order.orderNumber.toString().includes(searchQuery))
+                                    .map((order, index) => (
+                                        <div key={index} className="item">
+                                            <div className="order-product-details">
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <p>Order #: {order.orderNumber}</p>
                                                 </div>
-                                            </div>
-                                            <div className="admin-price-quantity-container">
-                                                <div className="admin-price-container">
-                                                    <div className="admin-price-quantity">
-                                                        <p>Price: </p>
-                                                    </div>
-                                                    <div className="admin-price-value">
-                                                        <span>{parseFloat(product.price?.$numberDecimal)?.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' })}</span>
-                                                    </div>
-                                                </div>
-                                                <div className="admin-quantity-container">
-                                                    <div className="admin-price-quantity">
-                                                        <p>Inventory: </p>
-                                                    </div>
-                                                    <div className="admin-quantity-value">
-                                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                            <span style={{ marginTop: '2px' }}>{product.currentInventory}</span>
-                                                            <button
-                                                                className="edit-inventory-btn"
-                                                                style={{ marginRight: '3px' }}
-                                                                onClick={() => startEdit(product)}
+                                                <div className="order-price-quantity-container">
+                                                    <div className="order-price-container">
+                                                        <div className="order-price-quantity">
+                                                            <span>Status: </span>
+                                                            <select
+                                                                className="order-status-dropdown"
+                                                                value={order.status}
+                                                                onChange={(e) => handleStatusChange(order.orderNumber, e.target.value)}
                                                             >
-                                                                EDIT
+                                                                <option value="Payment Not Confirmed">Payment Not Confirmed</option>
+                                                                <option value="Cancelled">Cancelled</option>
+                                                                <option value="Paid">Paid</option>
+                                                                <option value="Processing">Processing</option>
+                                                                <option value="Packed">Packed</option>
+                                                                <option value="Shipped">Shipped</option>
+                                                                <option value="Delivered">Delivered</option>
+                                                            </select>
+                                                            <span style={{ marginLeft: '20px' }}>Order Details: </span>
+                                                            <button
+                                                                className="order-open-product-btn"
+                                                                onClick={() => openOrderDetailsModal(order.orderNumber)}
+                                                            >
+                                                                OPEN
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
-                                <button className="add-product-btn add-btn" onClick={addNewProduct}>+ Add Product</button>
+                                    ))}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <EditModal
-                isOpen={isEditModalOpen}
-                onClose={() => setIsEditModalOpen(false)}
-                product={currentEditProduct}
-                onSave={saveEdits}
-            />
-            <AddModal
-                isOpen={isAddModalOpen}
-                onClose={() => setIsAddModalOpen(false)}
-                onSave={handleAddProduct}
-            />
+
+            <Modal show={showDetailsModal} onHide={() => setShowDetailsModal(false)}>
+                <Modal.Header>
+                    <Modal.Title className="order-modal-title-center">
+                        <h2>Order Details</h2>
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="order-modal-body-center">
+                    {selectedOrderDetails ? (
+                        <table className="order-modal-table">
+                            <tbody>
+                                <tr>
+                                    <td>Customer Username: </td>
+                                    <td>{selectedOrderDetails.customerUsername}</td>
+                                </tr>
+                                <tr>
+                                    <td>Product Ordered: </td>
+                                    <td>{selectedOrderDetails.productOrdered}</td>
+                                </tr>
+                                <tr>
+                                    <td>Count: </td>
+                                    <td>{selectedOrderDetails.productOrderedCount}</td>
+                                </tr>
+                                <tr>
+                                    <td>Address: </td>
+                                    <td>{selectedOrderDetails.address}</td>
+                                </tr>
+                                <tr>
+                                    <td>Status: </td>
+                                    <td>{selectedOrderDetails.currentOrderStatus}</td>
+                                </tr>
+                                <tr>
+                                    <td>Payment Proof: </td>
+                                    <td>{selectedOrderDetails.paymentProof}</td>
+                                </tr>
+                                <tr>
+                                    <td>Order Date Placed: </td>
+                                    <td>{selectedOrderDetails.orderDatePlaced}</td>
+                                </tr>
+                                <tr>
+                                    <td>Order Date Completed: </td>
+                                    <td>{selectedOrderDetails.orderDateCompleted}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    ) : (
+                        <p>No order details</p>
+                    )}
+                </Modal.Body>
+                <Modal.Footer className="order-modal-footer-center">
+                    <button className="order-modal-cancel-inventory-btn" onClick={() => setShowDetailsModal(false)}>Close</button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

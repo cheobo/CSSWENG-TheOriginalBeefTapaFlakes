@@ -161,6 +161,13 @@ function AddModal({ isOpen, onClose, onSave }) {
     });
     const [imageFile, setImageFile] = useState(null);
 
+    // Reset input fields upon opening modal
+    useEffect(() => {
+        if (isOpen) {
+            resetForm();
+        }
+    }, [isOpen]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
 
@@ -179,6 +186,20 @@ function AddModal({ isOpen, onClose, onSave }) {
         }));
     };
 
+    const resetForm = () => {
+        setNewProduct({
+            productName: '',
+            description: '',
+            packageOption: '',
+            packageSize: '',
+            bottlesPerFlavor: '',
+            price: '',
+            inventory: '',
+            ingredients: '',
+            nutritionalInfo: '',
+        });
+        setImageFile(null);
+    };
 
     const handleSubmit = () => {
         if (newProduct.bottlesPerFlavor) {
@@ -194,6 +215,7 @@ function AddModal({ isOpen, onClose, onSave }) {
             onSave(newProduct);
         }
         onClose();
+        resetForm();
     };
 
 
@@ -259,6 +281,7 @@ const AdminDashboard = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [currentEditProduct, setCurrentEditProduct] = useState(null);
+    const [filter, setFilter] = useState('');
 
     // Effect for disabling/enabling body scroll
     useEffect(() => {
@@ -285,6 +308,12 @@ const AdminDashboard = () => {
                 }
 
                 console.log('Product deleted successfully');
+
+                // Remove the deleted product from the products list
+                setProducts(prevProducts => prevProducts.filter(product => !(product.productId === productId && product.packageId === packageId)));
+
+                // Reset filter to show all products
+                setFilter('');
             } catch (error) {
                 console.error('Error deleting product:', error);
                 alert('An error occurred while deleting the product.');
@@ -385,15 +414,37 @@ const AdminDashboard = () => {
         }
     };
 
+    // Unique product names for the filter dropdown
+    const productNames = [...new Set(products.map(product => product.productName))];
+
+    // Filter products based on the selected product name
+    const filteredProducts = products.filter(product => 
+        filter === '' || product.productName === filter
+    );
+
     return (
         <div className="admin-grid-container">
             <div className="admin-elements-container">
-                <h1 className="dashboard-title">Product Management</h1>
+                <h1 className="dashboard-title">
+                    Product Management
+                    <span className="admin-filter-dropdown">
+                        Filter:
+                        <select 
+                            value={filter}
+                            onChange={e => setFilter(e.target.value)}
+                        >
+                            <option value="">All Products</option>
+                            {productNames.map(name => (
+                                <option key={name} value={name}>{name}</option>
+                            ))}
+                        </select>
+                    </span>
+                </h1>
                 <div className="admin-grid-product">
                     <div className="admin-cart-container">
                         <div className="admin-flex-container">
                             <div className="admin-product-container">
-                                {products.map((product) => (
+                                {filteredProducts.map((product) => (
                                     <div key={product.packageId} className="item">
                                         <img src={`http://localhost:5000/${product.image}`} alt={product.productName} />
                                         <div className="admin-product-details">
@@ -446,9 +497,9 @@ const AdminDashboard = () => {
                                         </div>
                                     </div>
                                 ))}
-                                <button className="add-product-btn add-btn" onClick={addNewProduct}>+ Add Product</button>
                             </div>
                         </div>
+                        <button className="add-product-btn add-btn" onClick={addNewProduct}>+ Add Product</button>
                     </div>
                 </div>
             </div>

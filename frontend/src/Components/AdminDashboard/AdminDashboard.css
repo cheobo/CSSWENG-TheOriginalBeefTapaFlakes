@@ -18,7 +18,7 @@
     padding: 20px;
     border: 1px solid #000;
     max-width: 600px;
-    transform: translateY(-18%);
+    transform: translateY(1%);
 }
 
 .modal-table {
@@ -80,12 +80,22 @@
 }
 
 .dashboard-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     text-align: left;
     width: 100%;
     font-size: 30px;
     color: #333;
     text-decoration: underline;
     margin-left: 20px;
+}
+
+.admin-filter-dropdown select {
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 .new-product-btn {
@@ -215,6 +225,9 @@
 .admin-flex-container {
     display: flex;
     width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 725px;
 }
 
 .admin-product-container {
