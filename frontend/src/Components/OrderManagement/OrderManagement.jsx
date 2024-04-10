@@ -31,6 +31,26 @@ const OrderManagement = () => {
     }, [token, navigate])
 
     useEffect(() => {
+        // Display success message for 3 seconds then clear it
+        if (successMessage) {
+            const timeout = setTimeout(() => {
+                setSuccessMessage('');
+            }, 3000);
+            return () => clearTimeout(timeout);
+        }
+    }, [successMessage]);
+
+    useEffect(() => {
+        // Display error message for 3 seconds then clear it
+        if (errorMessage) {
+            const timeout = setTimeout(() => {
+                setErrorMessage('');
+            }, 3000);
+            return () => clearTimeout(timeout);
+        }
+    }, [errorMessage]);
+
+    useEffect(() => {
         const fetchOrders = async () => {
             try {
                 const response = await fetch(`https://tobtf.onrender.com/api/orders/fetchOrders`, {
@@ -102,7 +122,6 @@ const OrderManagement = () => {
             }
 
             setSuccessMessage('Order status updated successfully.');
-            setTimeout(() => setSuccessMessage(''), 3000);
     
             // Update the status locally for immediate UI feedback
             
@@ -121,7 +140,6 @@ const OrderManagement = () => {
         } catch (error) {
             console.error(error);
             setErrorMessage('Failed to update order status');
-            setTimeout(() => setErrorMessage(''), 3000);
         }
     };
 
