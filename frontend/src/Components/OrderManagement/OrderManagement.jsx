@@ -163,9 +163,9 @@ const OrderManagement = () => {
 
     return (
         <div className="order-grid-container">
+            {successMessage && <StatusMessage message={successMessage} type="success" />}
+            {errorMessage && <StatusMessage message={errorMessage} type="error" />}
             <div className="order-elements-container">
-                {successMessage && <StatusMessage message={successMessage} type="success" />}
-                {errorMessage && <StatusMessage message={errorMessage} type="error" />}
                 <h1 className="order-dashboard-title">
                     Order Management
                     <div>
