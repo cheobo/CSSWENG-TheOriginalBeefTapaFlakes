@@ -1,11 +1,11 @@
-.page-container {
+.about-page-full {
   display: flex;
   justify-content: space-between;
   margin-top: 50px;
   margin-bottom: 25px;
 }
 
-.about-container {
+.container-1-left-about {
   flex: 0.5;
   max-width: 50%;
   margin-left: 50px;
@@ -20,7 +20,7 @@ p {
   font-size: 18px;
 }
 
-.collapsible-sections {
+.container-2-right-about-collapsible {
   flex: 1;
   background-color: white;
   padding: 20px;

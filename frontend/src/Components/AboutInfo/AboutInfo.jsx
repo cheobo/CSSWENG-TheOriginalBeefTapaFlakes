@@ -4,13 +4,13 @@ import './AboutInfo.css';
 
 const AboutInfo = () => {
   return (
-    <div className="page-container">
-    <div className="about-container">
+    <div className="about-page-full">
+    <div className="container-1-left-about">
       <h1>ABOUT US</h1>
       <p>What about Original Beef Tapa Flakes? You are currently in the about page where you can check our contact details, payment methods, and our terms service, alongside our refund policy. Do read carefully and feel free to email us using the email in the Contact section to reach out to us for any other concern that wasn’t mentioned in our FAQ.</p>
       </div>
 
-      <div className="collapsible-sections">
+      <div className="container-2-right-about-collapsible">
         <Collapsible trigger="Shipping">
           <p>Via Shoppee or via website.</p>
         </Collapsible>
