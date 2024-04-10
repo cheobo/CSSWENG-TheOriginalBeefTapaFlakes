@@ -69,7 +69,7 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
         if (order.status === 'Delivered'){
             order.dateCompleted = dateCompleted;
         } else {
-            order.dateCompleted === null;
+            order.dateCompleted = null;
         }
         await order.save();
         res.json({ message: 'Order status updated successfully' });
