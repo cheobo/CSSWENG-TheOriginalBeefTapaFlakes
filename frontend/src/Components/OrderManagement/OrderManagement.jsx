@@ -46,7 +46,7 @@ const OrderManagement = () => {
         };
 
         fetchOrders();
-    }, []);
+    }, [orders]);
 
     const fetchUser = async (userId) => {
         try {
