@@ -120,10 +120,7 @@ const OrderManagement = () => {
                 // If the server response is not ok, throw an error
                 throw new Error('Failed to update order status');
             }
-
-            setSuccessMessage('Order status updated successfully.');
     
-            // Update the status locally for immediate UI feedback
             
 
             const updatedOrders = orders.map((order) => {
@@ -137,6 +134,7 @@ const OrderManagement = () => {
             });
     
             setOrders(updatedOrders);
+            setSuccessMessage('Order status updated successfully.');
         } catch (error) {
             console.error(error);
             setErrorMessage('Failed to update order status');
