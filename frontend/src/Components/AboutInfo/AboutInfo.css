@@ -12,11 +12,11 @@
   padding: 20px;
 }
 
-h1 {
+.about-page h1 {
   font-size: 48px;
 }
 
-p {
+.about-page p {
   font-size: 18px;
 }
 

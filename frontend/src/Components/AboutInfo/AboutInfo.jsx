@@ -5,7 +5,7 @@ import './AboutInfo.css';
 const AboutInfo = () => {
   return (
     <div className="about-page-full">
-    <div className="container-1-left-about">
+    <div className="container-1-left-about about-info-page">
       <h1>ABOUT US</h1>
       <p>What about Original Beef Tapa Flakes? You are currently in the about page where you can check our contact details, payment methods, and our terms service, alongside our refund policy. Do read carefully and feel free to email us using the email in the Contact section to reach out to us for any other concern that wasn’t mentioned in our FAQ.</p>
       </div>
