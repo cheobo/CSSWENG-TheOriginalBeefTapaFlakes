@@ -74,9 +74,21 @@ const registerAdmin = asyncHandler(async (req, res) => {
     }
 });
 
+const getUsersById = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.userId);
+  
+    if (user) {
+      return res.json(user);
+    } else {
+      res.status(404);
+      throw new Error("Product not found");
+    }
+});
+
 export {
     authenticateUser,
     logoutUser,
     registerUser,
-    registerAdmin
+    registerAdmin,
+    getUsersById
 };

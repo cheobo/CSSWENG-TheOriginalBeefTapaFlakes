@@ -13,6 +13,7 @@ const OrderManagement = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [token, setToken] = useState(localStorage.getItem('jwt'));
+    const navigate = useNavigate();
     
     useEffect(() => {
     
@@ -31,11 +32,8 @@ const OrderManagement = () => {
 
     useEffect(() => {
         const fetchOrders = async () => {
-            const token = localStorage.getItem('jwt');
-            const decoded = decodeToken(token);
-            const userId = decoded?._id; // Ensure this matches your token structure
             try {
-                const response = await fetch(`https://tobtf.onrender.com/api/orders/fetchOrders/${userId}`, {
+                const response = await fetch(`https://tobtf.onrender.com/api/orders/fetchOrders`, {
                     headers: {
                         Authorization: `Bearer ${token}`, // If your API requires authorization
                     },
@@ -50,29 +48,42 @@ const OrderManagement = () => {
         fetchOrders();
     }, []);
 
+    const fetchUser = async (userId) => {
+        try {
+            const response = await fetch(`https://tobtf.onrender.com/api/users/${userId}`);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Failed to fetch users:', error);
+        }
+    };
+
+
     const StatusMessage = ({ message, type }) => (
         <div className={`status-message ${type}`}>{message}</div>
     );
 
-    const openOrderDetailsModal = (orderId) => {
+    const openOrderDetailsModal = async (orderId) => {
         // Find the order details by orderId
         const orderDetails = orders.find(order => order._id === orderId);
         if (orderDetails) {
-            // Decode the JWT token from localStorage to get the username
-            const token = localStorage.getItem('jwt');
-            const decoded = decodeToken(token);
-    
-            // Check if the userId in the order matches the userId in the token
-            if (orderDetails.userId === decoded._id) {
-                // Add the username from the decoded token to the order details
-                const orderDetailsWithUsername = { ...orderDetails, username: decoded.username };
-                setSelectedOrderDetails(orderDetailsWithUsername);
-                setShowDetailsModal(true);
+            if (orderDetails.userId) {
+                try {
+                    // Fetch user data asynchronously
+                    const user = await fetchUser(orderDetails.userId);
+                    // Add the username from the decoded token to the order details
+                    const orderDetailsWithUsername = { ...orderDetails, username: user.username };
+                    setSelectedOrderDetails(orderDetailsWithUsername);
+                    setShowDetailsModal(true);
+                } catch (error) {
+                    console.error('Failed to fetch user:', error);
+                }
             }
         }
     };
 
     const handleStatusChange = async (orderId, newStatus) => {
+        const today = new Date().toISOString(); // Get current date and time in ISO format
         try {
             // Assuming you're using Bearer token authentication
             const token = localStorage.getItem('jwt');
@@ -82,7 +93,7 @@ const OrderManagement = () => {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`, // Include your auth token here
                 },
-                body: JSON.stringify({ status: newStatus }),
+                body: JSON.stringify({ status: newStatus, dateCompleted: today }),
             });
 
             if (!response.ok) {
@@ -94,9 +105,14 @@ const OrderManagement = () => {
             setTimeout(() => setSuccessMessage(''), 3000);
     
             // Update the status locally for immediate UI feedback
+            
+
             const updatedOrders = orders.map((order) => {
                 if (order._id === orderId) {
-                    return { ...order, status: newStatus };
+                    if (order.status === "Delivered") {
+                        return { ...order, status: newStatus, dateCompleted: today };
+                    }
+                    return { ...order, status: newStatus, dateCompleted: null };
                 }
                 return order;
             });
