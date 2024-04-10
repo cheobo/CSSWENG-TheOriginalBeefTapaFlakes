@@ -7,7 +7,7 @@ const authenticateUser = asyncHandler(async(req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
-        res.status(200).json({ message: "User logged in successfully. Redirecting to Home page...", token: generateToken(res, user)});
+        res.status(200).json({ message: "User logged in successfully. Redirecting you to the home page.", token: generateToken(res, user)});
         return;
     } else {
         res.status(401).json({ message: "Invalid email or password."});
