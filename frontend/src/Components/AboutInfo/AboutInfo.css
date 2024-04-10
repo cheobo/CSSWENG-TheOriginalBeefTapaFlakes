@@ -1,24 +1,27 @@
-.about-container {
+.page-container {
   display: flex;
   justify-content: space-between;
-  max-width: 100%;
-  margin: auto;
+}
+
+.about-container {
+  flex: 0.5;
+  max-width: 50%;
+  margin-left: 50px;
   padding: 20px;
 }
 
 h1 {
   font-size: 48px;
-  margin-left: 50px;
 }
 
 p {
   font-size: 18px;
-  margin-left: 50px;
 }
 
 .collapsible-sections {
+  flex: 1;
   background-color: white;
-  width: 75%;
+  padding: 20px;
 }
 
 .Collapsible {
